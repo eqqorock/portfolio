@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mile-Kilometer Converter</title>
+    <script>
+        function milesToKm() {
+            let miles = parseFloat(document.getElementById('miles').value);
+            if (!isNaN(miles)) {
+                document.getElementById('kmResult').textContent = (miles * 1.60934).toFixed(3) + " km";
+            } else {
+                document.getElementById('kmResult').textContent = "";
+            }
+        }
+
+        function kmToMiles() {
+            let km = parseFloat(document.getElementById('km').value);
+            if (!isNaN(km)) {
+                document.getElementById('mileResult').textContent = (km / 1.60934).toFixed(3) + " miles";
+            } else {
+                document.getElementById('mileResult').textContent = "";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Mile to Kilometer Converter</h2>
+    <input type="number" id="miles" placeholder="Miles" oninput="milesToKm()">
+    <span id="kmResult"></span>
+    <br><br>
+    <h2>Kilometer to Mile Converter</h2>
+    <input type="number" id="km" placeholder="Kilometers" oninput="kmToMiles()">
+    <span id="mileResult"></span>
+</body>
+</html>
+git push
