@@ -21,6 +21,12 @@
         }
         .container { padding: 2em; }
         .hidden { display: none; }
+    /* Project card styles */
+    .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .project-card { background: #f7f7f7; padding: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .project-card h2 { margin: 0 0 0.5rem 0; font-size: 1.1rem; }
+    .project-card p { margin: 0 0 0.75rem 0; font-size: 0.95rem; }
+    .project-card a.button { display: inline-block; background: #0078d4; color: #fff; padding: 0.4rem 0.6rem; border-radius: 4px; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -38,6 +44,13 @@
         <section id="portfolio" class="hidden">
             <h1>Portfolio</h1>
             <p>Showcase your projects here.</p>
+            <div class="projects">
+                <article class="project-card">
+                    <h2>Minesweeper</h2>
+                    <p>A web-based Minesweeper game. Click the button to open and play.</p>
+                    <a class="button" href="./minesweeper.html" target="_blank" rel="noopener">Play Minesweeper</a>
+                </article>
+            </div>
         </section>
         <section id="resources" class="hidden">
             <h1>Resources</h1>
