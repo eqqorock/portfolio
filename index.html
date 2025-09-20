@@ -27,6 +27,11 @@
     .project-card h2 { margin: 0 0 0.5rem 0; font-size: 1.1rem; }
     .project-card p { margin: 0 0 0.75rem 0; font-size: 0.95rem; }
     .project-card a.button { display: inline-block; background: #0078d4; color: #fff; padding: 0.4rem 0.6rem; border-radius: 4px; text-decoration: none; }
+    section h1 { font-size:2.2em; margin-bottom:0.5em; }
+    section h2 { font-size:1.3em; margin-top:1.5em; }
+    section { margin-bottom:2.5em; }
+    .subnav { margin:1em 0; }
+    .subnav a { text-decoration: underline; color: #0078d4; margin-right:1em; font-size:1.05em; }
     </style>
 </head>
 <body>
@@ -41,31 +46,94 @@
             <h1>About Me</h1>
             <p>Welcome to my portfolio website! Here you can learn more about me, see my work, find useful resources, and get in touch.</p>
         </section>
-        <section id="portfolio" class="hidden">
-            <h1>Portfolio</h1>
-            <p>Showcase your projects here.</p>
-            <div class="projects">
-                <article class="project-card">
-                    <h2>Minesweeper</h2>
-                    <p>A web-based Minesweeper game. Click the button to open and play.</p>
-                    <a class="button" href="./minesweeper.html" target="_blank" rel="noopener">Play Minesweeper</a>
-                </article>
-            </div>
-        </section>
-        <section id="resources" class="hidden">
-            <h1>Resources</h1>
-            <p>Share useful links or documents here.</p>
-        </section>
+     <section id="portfolio" class="hidden">
+    <h1>Portfolio</h1>
+    <nav class="subnav">
+        <a href="#cybersecurity" onclick="jumpToPortfolio('cybersecurity'); return false;">Cybersecurity</a>
+        <a href="#games" onclick="jumpToPortfolio('games'); return false;">Games</a>
+    </nav>
+    <div id="cybersecurity" style="margin-top:2em;">
+        <h2 style="text-decoration:underline; font-size:1.4em;">Cybersecurity</h2>
+        <div class="projects">
+            <!-- Example Cybersecurity Project -->
+            <article class="project-card">
+                <h2>Security Audit Tool</h2>
+                <p>A tool for automating basic security audits. (Project details here.)</p>
+            </article>
+        </div>
+    </div>
+    <div id="games" style="margin-top:2em;">
+        <h2 style="text-decoration:underline; font-size:1.4em;">Games</h2>
+        <div class="projects">
+            <article class="project-card">
+                <h2>Minesweeper</h2>
+                <p>A web-based Minesweeper game. Click the button to open and play.</p>
+                <a class="button" href="/portfolio/minesweeper.html" target="_blank" rel="noopener">Play Minesweeper</a>
+            </article>
+        </div>
+    </div>
+    </section>
+<section id="resources" class="hidden">
+    <h1>Resources</h1>
+    <nav class="subnav">
+        <a href="#investigation" onclick="jumpToResource('investigation'); return false;">Investigation</a>
+        <a href="#learning" onclick="jumpToResource('learning'); return false;">Learning</a>
+        <a href="#practice" onclick="jumpToResource('practice'); return false;">Practice</a>
+    </nav>
+    <div id="investigation" style="margin-top:2em;">
+        <h2 style="text-decoration:underline; font-size:1.2em;">Investigation</h2>
+        <ul style="font-size:1.1em;">
+            <li><a href="https://attack.mitre.org/" target="_blank" rel="noopener">https://attack.mitre.org/</a></li>
+        </ul>
+    </div>
+    <div id="learning" style="margin-top:2em;">
+        <h2 style="text-decoration:underline; font-size:1.2em;">Learning</h2>
+        <ul style="font-size:1.1em;">
+            <li><a href="https://www.netacad.com/" target="_blank" rel="noopener">https://www.netacad.com/</a></li>
+        </ul>
+    </div>
+    <div id="practice" style="margin-top:2em;">
+        <h2 style="text-decoration:underline; font-size:1.2em;">Practice</h2>
+        <ul style="font-size:1.1em;">
+            <li><a href="https://tryhackme.com/" target="_blank" rel="noopener">https://tryhackme.com/</a></li>
+            <li><a href="https://www.vulnhub.com/" target="_blank" rel="noopener">https://www.vulnhub.com/</a></li>
+        </ul>
+    </div>
+</section>
         <section id="contact" class="hidden">
             <h1>Contact</h1>
-            <p>Provide your contact information or a contact form here.</p>
+            <p>Coming Soon!</p>
         </section>
     </div>
     <script>
         function showSection(sectionId) {
             const sections = document.querySelectorAll('section');
-            sections.forEach(sec => sec.classList.add('hidden'));
-            document.getElementById(sectionId).classList.remove('hidden');
+            sections.forEach(sec => {
+                sec.classList.add('hidden');
+                sec.style.display = 'none';
+            });
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.classList.remove('hidden');
+                target.style.display = 'block';
+                console.log('showSection: showing', sectionId);
+            } else {
+                console.warn('showSection: no element with id', sectionId);
+            }
+        }
+        function jumpToPortfolio(subId) {
+            showSection('portfolio');
+            setTimeout(function() {
+                const el = document.getElementById(subId);
+                if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+            }, 50);
+        }
+        function jumpToResource(subId) {
+            showSection('resources');
+            setTimeout(function() {
+                const el = document.getElementById(subId);
+                if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+            }, 50);
         }
         document.addEventListener('DOMContentLoaded', function() {
             showSection('about');
