@@ -57,12 +57,15 @@
             color: #4e54c8;
             cursor: pointer;
             user-select: none;
-            transition: background 0.15s;
+            transition: background 0.15s, border 0.15s;
+            border: 2px solid #bfc2d6;
         }
         .cell.revealed {
-            background: #f0f2f8;
+            background: #4e54c8;
+            color: #fff;
             cursor: default;
             box-shadow: none;
+            border: 2px solid #222;
         }
         .cell.mine {
             color: #e74c3c;
@@ -97,12 +100,45 @@
 <body>
     <div class="banner">Minesweeper</div>
     <div class="game-container">
+        <div style="margin-bottom: 1em; display: flex; gap: 1em; flex-wrap: wrap; justify-content: center;">
+            <label>Board Size:
+                <select id="boardSize">
+                    <option value="small">Small (8x8)</option>
+                    <option value="medium" selected>Medium (10x10)</option>
+                    <option value="large">Large (12x12)</option>
+                    <option value="xl">XL (16x16)</option>
+                    <option value="xxl">XXL (20x20)</option>
+                    <option value="xxxl">XXXL (24x24)</option>
+                </select>
+            </label>
+            <label>Difficulty:
+                <select id="difficulty">
+                    <option value="easy">Easy</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="hard">Hard</option>
+                </select>
+            </label>
+        </div>
         <div class="status" id="status"></div>
         <div class="board" id="board"></div>
         <button class="reset-btn" onclick="initGame()">Restart</button>
     </div>
     <script>
-        const rows = 10, cols = 10, minesCount = 15;
+        // Board size and mine count presets
+        const boardSizes = {
+            small: {rows: 8, cols: 8},
+            medium: {rows: 10, cols: 10},
+            large: {rows: 12, cols: 12},
+            xl: {rows: 16, cols: 16},
+            xxl: {rows: 20, cols: 20},
+            xxxl: {rows: 24, cols: 24}
+        };
+        const minePercents = {
+            easy: 0.10,
+            medium: 0.15,
+            hard: 0.22
+        };
+        let rows = 10, cols = 10, minesCount = 15;
         let board = [], revealed = [], flagged = [], gameOver = false, cellsRevealed = 0;
 
         function shuffle(array) {
@@ -114,12 +150,24 @@
         }
 
         function initGame() {
+            // Get selected board size and difficulty
+            const sizeSel = document.getElementById('boardSize');
+            const diffSel = document.getElementById('difficulty');
+            const size = sizeSel ? sizeSel.value : 'medium';
+            const diff = diffSel ? diffSel.value : 'medium';
+            rows = boardSizes[size].rows;
+            cols = boardSizes[size].cols;
+            minesCount = Math.floor(rows * cols * minePercents[diff]);
             board = Array.from({length: rows}, () => Array(cols).fill(0));
             revealed = Array.from({length: rows}, () => Array(cols).fill(false));
             flagged = Array.from({length: rows}, () => Array(cols).fill(false));
             gameOver = false;
             cellsRevealed = 0;
             document.getElementById('status').textContent = '';
+            // Update board grid style
+            const boardDiv = document.getElementById('board');
+            boardDiv.style.gridTemplateColumns = `repeat(${cols}, 36px)`;
+            boardDiv.style.gridTemplateRows = `repeat(${rows}, 36px)`;
             // Place mines
             let positions = [];
             for (let i = 0; i < rows * cols; i++) positions.push(i);
@@ -240,6 +288,14 @@
         }
 
         window.onload = initGame;
+        // Add event listeners to selectors
+        window.onload = function() {
+            const sizeSel = document.getElementById('boardSize');
+            const diffSel = document.getElementById('difficulty');
+            if (sizeSel) sizeSel.addEventListener('change', initGame);
+            if (diffSel) diffSel.addEventListener('change', initGame);
+            initGame();
+        };
     </script>
 </body>
 </html>
