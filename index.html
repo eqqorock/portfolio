@@ -70,6 +70,18 @@
                 <p>This section will feature cybersecurity tools and projects in the future.</p>
             </article>
         </div>
+
+        <div style="margin-top:1.5em;">
+            <h3 style="font-size:1.2em; text-decoration:underline;">Splunk Labs &amp; Exercises</h3>
+            <p style="margin-top:0.5em;">Upload PDF exercise files into the <strong>splunk-labs/</strong> folder in this repository. Files with a date in the filename (e.g. <em>2025-09-11 - Searching fields.pdf</em>) will be listed below, newest first.</p>
+            <ul id="splunk-list" style="font-size:1.05em; margin-top:0.5em;"></ul>
+        </div>
+
+        <div style="margin-top:1.5em;">
+            <h3 style="font-size:1.2em; text-decoration:underline;">TryHackeMe CTF Exercises &amp; Modules</h3>
+            <p style="margin-top:0.5em;">Upload PDF exercise files into the <strong>tryhackme/</strong> folder in this repository. Files with a date in the filename will be listed below, newest first.</p>
+            <ul id="tryhackme-list" style="font-size:1.05em; margin-top:0.5em;"></ul>
+        </div>
     </div>
     <div id="games" style="margin-top:2em;">
         <h2 style="text-decoration:underline; font-size:1.4em;">Games</h2>
@@ -204,6 +216,74 @@
                     });
                 });
             }
+        });
+
+        // --- Repository listing for cybersecurity PDFs ---
+        const GITHUB_OWNER = 'erpursuit';
+        const GITHUB_REPO = 'portfolio';
+        const GITHUB_BRANCH = 'main';
+
+        function parseDateFromName(name) {
+            // Try multiple date formats in filename
+            // YYYY-MM-DD or YYYY_MM_DD
+            let m = name.match(/(20\d{2})[\-_](0?[1-9]|1[0-2])[\-_](0?[1-9]|[12]\d|3[01])/);
+            if (m) return new Date(`${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`);
+            // MM-DD-YYYY or M-D-YYYY or MM_DD_YYYY
+            m = name.match(/(0?[1-9]|1[0-2])[\-_](0?[1-9]|[12]\d|3[01])[\-_](20\d{2})/);
+            if (m) return new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`);
+            // M/D/YYYY or MM/DD/YYYY (slashes sometimes replaced by hyphens on upload)
+            m = name.match(/(0?[1-9]|1[0-2])[\/]?(0?[1-9]|[12]\d|3[01])[\/]?(20\d{2})/);
+            if (m) return new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`);
+            return null;
+        }
+
+        async function listRepoPdfs(path, listElementId) {
+            const api = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodeURIComponent(path)}?ref=${GITHUB_BRANCH}`;
+            try {
+                const res = await fetch(api);
+                if (!res.ok) {
+                    console.warn('Could not fetch', api, res.status);
+                    return;
+                }
+                const items = await res.json();
+                const files = items.filter(it => it.type === 'file' && it.name.toLowerCase().endsWith('.pdf'))
+                    .map(it => ({name: it.name, url: it.download_url}));
+                // Attach parsed date where possible
+                files.forEach(f => {
+                    const d = parseDateFromName(f.name);
+                    f.date = d ? d.getTime() : 0;
+                });
+                // Sort newest first by parsed date, fallback to name desc
+                files.sort((a,b) => {
+                    if (a.date !== b.date) return b.date - a.date;
+                    return b.name.localeCompare(a.name);
+                });
+                const listEl = document.getElementById(listElementId);
+                if (!listEl) return;
+                if (files.length === 0) {
+                    listEl.innerHTML = '<li>No PDF exercises yet.</li>';
+                    return;
+                }
+                listEl.innerHTML = '';
+                files.forEach(f => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = f.url;
+                    a.target = '_blank';
+                    a.rel = 'noopener';
+                    a.textContent = f.name;
+                    li.appendChild(a);
+                    listEl.appendChild(li);
+                });
+            } catch (err) {
+                console.error('Error listing repo files for', path, err);
+            }
+        }
+
+        // Populate lists on load
+        document.addEventListener('DOMContentLoaded', function() {
+            listRepoPdfs('splunk-labs', 'splunk-list');
+            listRepoPdfs('tryhackme', 'tryhackme-list');
         });
     </script>
 </body>
