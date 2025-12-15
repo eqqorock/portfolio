@@ -1,4 +1,4 @@
-Place your TryHackeMe CTF exercise PDFs in this folder.
+Place your TryHackMe CTF exercise PDFs in this folder.
 
 Naming guidance:
 - Prefer filenames starting with a date in YYYY-MM-DD format, e.g. `2025-09-11 - Walkthrough.pdf`.
