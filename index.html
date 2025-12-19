@@ -74,11 +74,13 @@
         <div style="margin-top:1.5em;">
             <h3 style="font-size:1.2em; text-decoration:underline;">Splunk Labs &amp; Exercises</h3>
             <p style="margin-top:0.5em;">Coming soon!</p>
+            <ul id="splunk-list" style="font-size:1.05em; margin-top:0.5em;"></ul>
         </div>
 
         <div style="margin-top:1.5em;">
             <h3 style="font-size:1.2em; text-decoration:underline;">TryHackMe CTF Exercises &amp; Modules</h3>
             <p style="margin-top:0.5em;">Coming soon!</p>
+            <ul id="tryhackme-list" style="font-size:1.05em; margin-top:0.5em;"></ul>
         </div>
     </div>
     <div id="games" style="margin-top:2em;">
@@ -259,7 +261,7 @@
                 const listEl = document.getElementById(listElementId);
                 if (!listEl) return;
                 if (files.length === 0) {
-                    listEl.innerHTML = '<li>No PDF exercises yet.</li>';
+                    listEl.innerHTML = '<li>Coming soon!</li>';
                     return;
                 }
                 listEl.innerHTML = '';
