@@ -174,13 +174,17 @@
         const _quickPanel = document.getElementById('quick-links-panel');
         const _contactOriginalParent = _contactEl ? _contactEl.parentElement : null;
         const _contactOriginalNext = _contactEl ? _contactEl.nextElementSibling : null;
+        const _quickPanelOriginalDisplay = _quickPanel ? (_quickPanel.style.display || '') : '';
 
         function placeContactForMobile(){
             if(!(_contactEl && _heroEl && _quickPanel)) return;
             if(window.innerWidth <= 900){
+                // move contact into hero above quick panel so user sees it immediately
                 if(_contactEl.parentElement !== _heroEl){
                     _heroEl.insertBefore(_contactEl, _quickPanel);
                 }
+                // hide the quick links panel so it doesn't 'hog' the viewport on mobile
+                _quickPanel.style.display = 'none';
                 setTimeout(()=>{ _contactEl.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
             } else {
                 restoreContact();
@@ -189,10 +193,13 @@
 
         function restoreContact(){
             if(!(_contactEl && _contactOriginalParent)) return;
+            // restore contact DOM position
             if(_contactEl.parentElement !== _contactOriginalParent){
                 if(_contactOriginalNext) _contactOriginalParent.insertBefore(_contactEl, _contactOriginalNext);
                 else _contactOriginalParent.appendChild(_contactEl);
             }
+            // restore quick panel visibility
+            if(_quickPanel) _quickPanel.style.display = _quickPanelOriginalDisplay || '';
         }
         // Navigation and section handling
         function showTarget(id){
