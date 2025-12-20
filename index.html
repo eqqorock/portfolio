@@ -36,6 +36,9 @@
         .card h3{margin:0 0 8px 0}
         .card p{margin:0;color:var(--muted);font-size:0.95rem}
         .card a.action{display:inline-block;margin-top:10px;color:var(--accent);text-decoration:none;font-weight:600}
+        /* Quick links in hero/quick panel should match muted link color */
+        a.quick-link{color:var(--muted);text-decoration:none;font-weight:600}
+        a.quick-link:hover{color:var(--accent)}
 
         aside .panel h4{margin:0 0 10px 0}
         .list a{color:var(--muted);text-decoration:none;display:block;padding:8px;border-radius:8px}
@@ -79,9 +82,9 @@
                 <div class="panel" style="padding:20px;text-align:center">
                     <h4 style="margin-top:0">Quick Links</h4>
                     <div style="display:flex;gap:8px;flex-direction:column">
-                        <a class="action" href="#" data-target="cybersecurity">Cybersecurity</a>
-                        <a class="action" href="#" data-target="games">Games</a>
-                        <a class="action" href="#" data-target="miscellaneous">Miscellaneous</a>
+                        <a class="quick-link" href="#" data-target="cybersecurity">Cybersecurity</a>
+                        <a class="quick-link" href="#" data-target="games">Games</a>
+                        <a class="quick-link" href="#" data-target="miscellaneous">Miscellaneous</a>
                     </div>
                 </div>
             </div>
@@ -127,26 +130,26 @@
                 </article>
 
                 <article id="about" class="panel" style="margin-top:18px;display:none">
-                    <h2>About Me</h2>
-                    <p style="color:var(--muted)">Welcome to Erol's portfolio website! Here you can learn more about me, see my work, find useful resources, and get in touch.</p>
+                  <h2>About Me</h2>
+                  <p style="color:var(--muted)">Welcome to Erol's portfolio website! Here you can learn more about me, see my work, find useful resources, and get in touch.</p>
+                </article>
+
+                <article id="contact" class="panel" style="margin-top:18px;display:none">
+                  <h2>Contact Erol</h2>
+                  <form id="contactForm" class="contact-form" autocomplete="off">
+                    <label for="name">Name</label>
+                    <input id="name" name="name" required>
+                    <label for="email">Your Email</label>
+                    <input id="email" name="email" type="email" required>
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                    <button type="submit">Send Message</button>
+                  </form>
+                  <div id="thankYouMsg" style="display:none;color:var(--accent);margin-top:12px">Thank you — I'll respond shortly.</div>
                 </article>
             </div>
 
             <aside>
-                <div id="contact" class="panel" style="display:none">
-                    <h4>Contact Erol</h4>
-                    <form id="contactForm" class="contact-form" autocomplete="off">
-                        <label for="name">Name</label>
-                        <input id="name" name="name" required>
-                        <label for="email">Your Email</label>
-                        <input id="email" name="email" type="email" required>
-                        <label for="message">Message</label>
-                        <textarea id="message" name="message" rows="6" required></textarea>
-                        <button type="submit">Send Message</button>
-                    </form>
-                    <div id="thankYouMsg" style="display:none;color:var(--accent);margin-top:12px">Thank you — I'll respond shortly.</div>
-                </div>
-
                 <div class="panel" style="margin-top:14px">
                     <h4 style="margin-top:0">Other</h4>
                     <div class="list">
@@ -184,7 +187,25 @@
             });
         }
         document.querySelectorAll('[data-target]').forEach(el=>{
-            el.addEventListener('click',function(e){ e.preventDefault(); const t=this.dataset.target; if(t) showTarget(t); });
+            el.addEventListener('click',function(e){
+                e.preventDefault();
+                const t = this.dataset.target;
+                // Map subsection targets to top-level sections + scroll
+                const subMap = {
+                    'cybersecurity': {section:'portfolio', sub:'cybersecurity'},
+                    'games': {section:'portfolio', sub:'games'},
+                    'miscellaneous': {section:'portfolio', sub:'miscellaneous'},
+                    'investigation': {section:'resources', sub:'investigation'},
+                    'learning': {section:'resources', sub:'learning'},
+                    'practice': {section:'resources', sub:'practice'}
+                };
+                if(subMap[t]){
+                    showTarget(subMap[t].section);
+                    setTimeout(()=>{ const el2=document.getElementById(subMap[t].sub); if(el2) el2.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+                } else if(t) {
+                    showTarget(t);
+                }
+            });
         });
         // default
         showTarget('portfolio');
