@@ -79,7 +79,7 @@
                 <div class="cta"><a class="btn" href="#" data-target="contact">Contact me</a></div>
             </div>
             <div style="width:320px">
-                <div class="panel" style="padding:20px;text-align:center">
+                <div id="quick-links-panel" class="panel" style="padding:20px;text-align:center">
                     <h4 style="margin-top:0">Quick Links</h4>
                     <div style="display:flex;gap:8px;flex-direction:column">
                         <a class="quick-link" href="#" data-target="cybersecurity">Cybersecurity</a>
@@ -163,11 +163,37 @@
         </main>
 
         <footer>
-            Built with attention to detail — content preserved from original site.
+            Built with attention to detail.
         </footer>
     </div>
 
-    <script>
+        <script>
+        // Cache contact and hero/quick panel for mobile reflow
+        const _contactEl = document.getElementById('contact');
+        const _heroEl = document.querySelector('.hero');
+        const _quickPanel = document.getElementById('quick-links-panel');
+        const _contactOriginalParent = _contactEl ? _contactEl.parentElement : null;
+        const _contactOriginalNext = _contactEl ? _contactEl.nextElementSibling : null;
+
+        function placeContactForMobile(){
+            if(!(_contactEl && _heroEl && _quickPanel)) return;
+            if(window.innerWidth <= 900){
+                if(_contactEl.parentElement !== _heroEl){
+                    _heroEl.insertBefore(_contactEl, _quickPanel);
+                }
+                setTimeout(()=>{ _contactEl.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+            } else {
+                restoreContact();
+            }
+        }
+
+        function restoreContact(){
+            if(!(_contactEl && _contactOriginalParent)) return;
+            if(_contactEl.parentElement !== _contactOriginalParent){
+                if(_contactOriginalNext) _contactOriginalParent.insertBefore(_contactEl, _contactOriginalNext);
+                else _contactOriginalParent.appendChild(_contactEl);
+            }
+        }
         // Navigation and section handling
         function showTarget(id){
             const sections=['portfolio','resources','about','contact'];
@@ -204,6 +230,14 @@
                     setTimeout(()=>{ const el2=document.getElementById(subMap[t].sub); if(el2) el2.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
                 } else if(t) {
                     showTarget(t);
+                }
+
+                // Special handling for mobile contact: move contact above quick links so user sees it
+                if(t === 'contact'){
+                  placeContactForMobile();
+                } else {
+                  // restore original contact placement if user navigates elsewhere
+                  restoreContact();
                 }
             });
         });
@@ -256,6 +290,8 @@
         }
         // populate
         window.addEventListener('load', ()=>{ listRepoPdfs('tryhackme','tryhackme-list'); });
+        // restore contact on resize (desktop/tablet)
+        window.addEventListener('resize', ()=>{ if(window.innerWidth > 900) restoreContact(); });
     </script>
 </body>
 </html>
