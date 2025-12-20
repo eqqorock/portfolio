@@ -1,275 +1,240 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>My Portfolio</title>
-       <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        nav { 
-            background: #222; 
-            padding: 1em; 
-            margin-top: 2em;           /* Move nav down */
-            margin-left: 2em;           /* Move nav right */
-            border-radius: 8px 8px 0 0; /* Optional: rounded corners */
-            width: fit-content;         /* Shrink nav to fit links */
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Erol — Cybersecurity Portfolio</title>
+    <meta name="description" content="Professional cybersecurity portfolio showcasing labs, CTFs, tools and contact info.">
+    <style>
+        :root{
+            --bg:#0b0f14; --card:#0f1720; --muted:#94a3b8; --accent:#00bcd4; --glass:rgba(255,255,255,0.04);
+            --max-width:1100px; --radius:12px; --transition:200ms;
         }
-        nav a { 
-            color: #fff; 
-            margin-right: 1em; 
-            text-decoration: none; 
-            font-size: 1.1em;
-        }
-        .container { padding: 2em; }
-        .hidden { display: none; }
-    /* Project card styles */
-    .projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; }
-    .project-card { background: #f7f7f7; padding: 1rem; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    .project-card h2 { margin: 0 0 0.5rem 0; font-size: 1.1rem; }
-    .project-card p { margin: 0 0 0.75rem 0; font-size: 0.95rem; }
-    .project-card a.button { display: inline-block; background: #0078d4; color: #fff; padding: 0.4rem 0.6rem; border-radius: 4px; text-decoration: none; }
-    section h1 { font-size:2.2em; margin-bottom:0.5em; }
-    section h2 { font-size:1.3em; margin-top:1.5em; }
-    section { margin-bottom:2.5em; }
-    .subnav { margin:1em 0; }
-    .subnav a { text-decoration: underline; color: #fff; margin-right:1em; font-size:1.05em; } /* Changed to white */
-    /* Contact form styles */
-    .contact-form { max-width: 400px; margin: 2em 0; background: #222; padding: 2em; border-radius: 8px; }
-    .contact-form label { color: #fff; display: block; margin-bottom: 0.5em; }
-    .contact-form input, .contact-form textarea { width: 100%; padding: 0.6em; margin-bottom: 1em; border-radius: 4px; border: none; font-size: 1em; }
-    .contact-form textarea { resize: vertical; min-height: 80px; }
-    .send-btn { display: flex; align-items: center; justify-content: center; background: #0078d4; color: #fff; border: none; border-radius: 4px; padding: 0.7em 1.2em; font-size: 1.1em; cursor: pointer; transition: background 0.2s; }
-    .send-btn:hover { background: #005fa3; }
-    .send-btn svg { margin-right: 0.5em; }
-    .thank-you { color: #0078d4; font-size: 1.2em; margin-top: 1.5em; }
+        *{box-sizing:border-box}
+        body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; background:linear-gradient(180deg,#061019 0%, #07121a 60%); color:#e6eef6; -webkit-font-smoothing:antialiased;}
+        .wrap{max-width:var(--max-width);margin:40px auto;padding:28px}
+        header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+        .brand{display:flex;align-items:center;gap:14px}
+        .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:#021022}
+        .brand h1{font-size:1.05rem;margin:0}
+        nav.primary{display:flex;gap:14px}
+        nav.primary a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;transition:background var(--transition),color var(--transition)}
+        nav.primary a.active, nav.primary a:hover{background:var(--glass);color:var(--accent)}
+
+        .hero{display:flex;gap:28px;align-items:center;margin-top:24px}
+        .hero .intro{flex:1}
+        .hero h2{margin:0;font-size:2rem;letter-spacing:-0.6px}
+        .hero p{color:var(--muted);margin-top:10px;line-height:1.4}
+        .cta{margin-top:18px}
+        .btn{display:inline-block;background:linear-gradient(90deg,var(--accent),#7c3aed);color:#021022;padding:10px 14px;border-radius:10px;font-weight:600;text-decoration:none}
+
+        main{display:grid;grid-template-columns:1fr 340px;gap:26px;margin-top:28px}
+        .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px;border-radius:var(--radius);box-shadow:0 6px 30px rgba(2,6,23,0.6)}
+        .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+        .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+        .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+        .card h3{margin:0 0 8px 0}
+        .card p{margin:0;color:var(--muted);font-size:0.95rem}
+        .card a.action{display:inline-block;margin-top:10px;color:var(--accent);text-decoration:none;font-weight:600}
+
+        aside .panel h4{margin:0 0 10px 0}
+        .list a{color:var(--muted);text-decoration:none;display:block;padding:8px;border-radius:8px}
+        .list a:hover{background:var(--glass);color:var(--accent)}
+
+        footer{margin-top:30px;color:var(--muted);font-size:0.9rem;text-align:center}
+
+        /* Contact form */
+        .contact-form label{display:block;font-size:0.9rem;margin-bottom:6px;color:var(--muted)}
+        .contact-form input,.contact-form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+        .contact-form button{margin-top:10px;width:100%;padding:10px;border-radius:10px;border:0;background:var(--accent);color:#021022;font-weight:700}
+
+        @media (max-width:900px){main{grid-template-columns:1fr} .hero{flex-direction:column;align-items:flex-start} nav.primary{display:none}}
     </style>
 </head>
 <body>
-    <nav>
-        <a href="#" onclick="showSection('portfolio'); return false;">Portfolio</a>
-        <a href="#" onclick="showSection('resources'); return false;">Resources</a>
-        <a href="#" onclick="showSection('about'); return false;">About Me</a>
-        <a href="#" onclick="showSection('contact'); return false;">Contact</a>
-    </nav>
-    <div class="container">
-          <section id="about" class="hidden">
-            <h1>About Me</h1>
-            <p>Welcome to Erol's portfolio website! Here you can learn more about me, see my work, find useful resources, and get in touch.</p>
-        </section>
-      <section id="portfolio">
-    <h1>Portfolio</h1>
-        <nav class="subnav">
-            <a href="#cybersecurity" onclick="jumpToPortfolio('cybersecurity'); return false;">Cybersecurity</a>
-            <a href="#games" onclick="jumpToPortfolio('games'); return false;">Games</a>
-            <a href="#miscellaneous" onclick="jumpToPortfolio('miscellaneous'); return false;">Miscellaneous</a>
-        </nav>
-    <div id="cybersecurity" style="margin-top:2em;">
-        <h2 style="text-decoration:underline; font-size:1.4em;">Cybersecurity</h2>
-        <div style="margin-top:1.0em; margin-left:1.2em;">
-            <h3 style="font-size:1.15em; text-decoration:underline;">TryHackMe CTF Exercises &amp; Modules</h3>
-            <ul id="tryhackme-list" style="font-size:1.05em; margin-top:0.5em;"></ul>
-        </div>
-    </div>
-    <div id="games" style="margin-top:2em;">
-        <h2 style="text-decoration:underline; font-size:1.4em;">Games</h2>
-        <div class="projects">
-            <article class="project-card">
-                <h2>Minesweeper</h2>
-                <p>A web-based Minesweeper game. Click the button to open and play.</p>
-                <a class="button" href="/portfolio/minesweeper.html" target="_blank" rel="noopener">Play Minesweeper</a>
-            </article>
-        </div>
-    </div>
-    <div id="miscellaneous" style="margin-top:2em;">
-        <h2 style="text-decoration:underline; font-size:1.4em;">Miscellaneous</h2>
-        <div class="projects">
-            <article class="project-card">
-                <h2>Recipe Maker</h2>
-                <p>A simple web app to help you create and manage recipes. Try it out and make your own recipe cards!</p>
-                <a class="button" href="https://eqqorock.github.io/rm/" target="_blank" rel="noopener">Open Recipe Maker</a>
-            </article>
-            <article class="project-card">
-                <h2>AI Workout Planner</h2>
-                <p>An AI-powered workout planner that generates personalized workouts. Open it to plan your next session.</p>
-                <a class="button" href="https://eqqorock.github.io/ai-workout-planner/" target="_blank" rel="noopener">Open AI Workout Planner</a>
-            </article>
-        </div>
-    </div>
-    </section>
-<section id="resources" class="hidden">
-    <h1>Resources</h1>
-    <nav class="subnav">
-        <a href="#investigation" onclick="jumpToResource('investigation'); return false;">Investigation</a>
-        <a href="#learning" onclick="jumpToResource('learning'); return false;">Learning</a>
-        <a href="#practice" onclick="jumpToResource('practice'); return false;">Practice</a>
-    </nav>
-    <div id="investigation" style="margin-top:2em;">
-        <h2 style="text-decoration:underline; font-size:1.2em;">Investigation</h2>
-        <ul style="font-size:1.1em;">
-            <li><a href="https://attack.mitre.org/" target="_blank" rel="noopener">https://attack.mitre.org/</a></li>
-        </ul>
-    </div>
-    <div id="learning" style="margin-top:2em;">
-        <h2 style="text-decoration:underline; font-size:1.2em;">Learning</h2>
-        <ul style="font-size:1.1em;">
-            <li><a href="https://www.netacad.com/" target="_blank" rel="noopener">https://www.netacad.com/</a></li>
-        </ul>
-    </div>
-    <div id="practice" style="margin-top:2em;">
-        <h2 style="text-decoration:underline; font-size:1.2em;">Practice</h2>
-        <ul style="font-size:1.1em;">
-            <li><a href="https://tryhackme.com/" target="_blank" rel="noopener">https://tryhackme.com/</a></li>
-            <li><a href="https://www.vulnhub.com/" target="_blank" rel="noopener">https://www.vulnhub.com/</a></li>
-        </ul>
-    </div>
-</section>
-                    <section id="contact" class="hidden">
-                <h1>Contact Erol</h1>
-            <form class="contact-form" id="contactForm" autocomplete="off">
-                <label for="name">Name</label>
-                <input type="text" id="name" name="name" required autocomplete="off">
+    <div class="wrap">
+        <header>
+            <div class="brand">
+                <div class="logo">ER</div>
+                <div>
+                    <h1>Erol — Cybersecurity Portfolio</h1>
+                    <div style="color:var(--muted);font-size:0.9rem">Labs • CTFs • Tools • Writeups</div>
+                </div>
+            </div>
+            <nav class="primary" aria-label="Primary Navigation">
+                <a href="#" data-target="portfolio" class="active">Portfolio</a>
+                <a href="#" data-target="resources">Resources</a>
+                <a href="#" data-target="about">About</a>
+                <a href="#" data-target="contact">Contact</a>
+            </nav>
+        </header>
 
-                <label for="email">Your Email</label>
-                <input type="email" id="email" name="email" required autocomplete="off">
-
-                <label for="message">Message</label>
-                <textarea id="message" name="message" required></textarea>
-
-                <button type="submit" class="send-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="#fff" d="M2 21l21-9-21-9v7l15 2-15 2v7z"/></svg>
-                    Send email
-                </button>
-            </form>
-            <div id="thankYouMsg" class="thank-you" style="display:none;">
-                Thank you for reaching out, I'll respond shortly!
+        <section class="hero">
+            <div class="intro">
+                <h2>Practical cybersecurity work, CTF writeups, and tools crafted for real-world learning.</h2>
+                <p>Welcome — this portfolio collects TryHackMe modules, small web tools, investigations, and curated learning resources. Browse the sections to explore labs, play demos, or get in touch.</p>
+                <div class="cta"><a class="btn" href="#" data-target="contact">Contact me</a></div>
+            </div>
+            <div style="width:320px">
+                <div class="panel" style="padding:20px;text-align:center">
+                    <h4 style="margin-top:0">Quick Links</h4>
+                    <div style="display:flex;gap:8px;flex-direction:column">
+                        <a class="action" href="#" data-target="cybersecurity">Cybersecurity</a>
+                        <a class="action" href="#" data-target="games">Games</a>
+                        <a class="action" href="#" data-target="miscellaneous">Miscellaneous</a>
+                    </div>
+                </div>
             </div>
         </section>
+
+        <main>
+            <div>
+                <article id="portfolio" class="panel">
+                    <div class="section-title"><h2 style="margin:0">Portfolio</h2></div>
+                    <div id="cybersecurity">
+                        <h3>Cybersecurity</h3>
+                        <p style="color:var(--muted)">TryHackMe CTF exercises and module writeups.</p>
+                        <ul id="tryhackme-list" style="margin-top:12px;color:var(--muted)"></ul>
+                    </div>
+
+                    <div id="games" style="margin-top:18px">
+                        <h3>Games</h3>
+                        <div class="cards" style="margin-top:10px">
+                            <div class="card">
+                                <h3>Minesweeper</h3>
+                                <p>A web-based Minesweeper demo. Play and test logic skills.</p>
+                                <a class="action" href="/portfolio/minesweeper.html" target="_blank" rel="noopener">Play Minesweeper →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="miscellaneous" style="margin-top:18px">
+                        <h3>Miscellaneous</h3>
+                        <div class="cards">
+                            <div class="card"><h3>Recipe Maker</h3><p>A simple app to create and manage recipes.</p><a class="action" href="https://eqqorock.github.io/rm/" target="_blank" rel="noopener">Open →</a></div>
+                            <div class="card"><h3>AI Workout Planner</h3><p>Generates personalized workouts.</p><a class="action" href="https://eqqorock.github.io/ai-workout-planner/" target="_blank" rel="noopener">Open →</a></div>
+                        </div>
+                    </div>
+                </article>
+
+                <article id="resources" class="panel" style="margin-top:18px;display:none">
+                    <div class="section-title"><h2 style="margin:0">Resources</h2></div>
+                    <div style="display:flex;gap:12px;flex-direction:column">
+                        <div><strong>Investigation</strong><div class="list"><a href="https://attack.mitre.org/" target="_blank" rel="noopener">ATT&CK — MITRE</a></div></div>
+                        <div style="margin-top:8px"><strong>Learning</strong><div class="list"><a href="https://www.netacad.com/" target="_blank" rel="noopener">NetAcad</a></div></div>
+                        <div style="margin-top:8px"><strong>Practice</strong><div class="list"><a href="https://tryhackme.com/" target="_blank" rel="noopener">TryHackMe</a><a href="https://www.vulnhub.com/" target="_blank" rel="noopener">VulnHub</a></div></div>
+                    </div>
+                </article>
+
+                <article id="about" class="panel" style="margin-top:18px;display:none">
+                    <h2>About Me</h2>
+                    <p style="color:var(--muted)">Welcome to Erol's portfolio website! Here you can learn more about me, see my work, find useful resources, and get in touch.</p>
+                </article>
+            </div>
+
+            <aside>
+                <div id="contact" class="panel" style="display:none">
+                    <h4>Contact Erol</h4>
+                    <form id="contactForm" class="contact-form" autocomplete="off">
+                        <label for="name">Name</label>
+                        <input id="name" name="name" required>
+                        <label for="email">Your Email</label>
+                        <input id="email" name="email" type="email" required>
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="6" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
+                    <div id="thankYouMsg" style="display:none;color:var(--accent);margin-top:12px">Thank you — I'll respond shortly.</div>
+                </div>
+
+                <div class="panel" style="margin-top:14px">
+                    <h4 style="margin-top:0">Other</h4>
+                    <div class="list">
+                        <a href="#" data-target="portfolio">Portfolio</a>
+                        <a href="#" data-target="resources">Resources</a>
+                        <a href="#" data-target="about">About</a>
+                        <a href="#" data-target="contact">Contact</a>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <footer>
+            Built with attention to detail — content preserved from original site.
+        </footer>
     </div>
-   <script>
-        function showSection(sectionId) {
-            const sections = document.querySelectorAll('section');
-            sections.forEach(sec => {
-                sec.classList.add('hidden');
-                sec.style.display = 'none';
+
+    <script>
+        // Navigation and section handling
+        function showTarget(id){
+            const sections=['portfolio','resources','about','contact'];
+            sections.forEach(s=>{
+                const el=document.getElementById(s);
+                if(!el) return;
+                if(s===id){ el.style.display='block'; }
+                else { el.style.display = 'none'; }
             });
-            const target = document.getElementById(sectionId);
-            if (target) {
-                target.classList.remove('hidden');
-                target.style.display = 'block';
-                console.log('showSection: showing', sectionId);
-            } else {
-                console.warn('showSection: no element with id', sectionId);
-            }
+            // contact is in aside panel with id 'contact'
+            const contactPanel = document.getElementById('contact');
+            if(id==='contact' && contactPanel) contactPanel.style.display='block';
+            if(id!=='contact' && contactPanel) contactPanel.style.display='none';
+            // highlight top nav
+            document.querySelectorAll('nav.primary a').forEach(a=>{
+                a.classList.toggle('active', a.dataset.target===id);
+            });
         }
-        function jumpToPortfolio(subId) {
-            showSection('portfolio');
-            setTimeout(function() {
-                const el = document.getElementById(subId);
-                if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
-            }, 50);
-        }
-        function jumpToResource(subId) {
-            showSection('resources');
-            setTimeout(function() {
-                const el = document.getElementById(subId);
-                if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
-            }, 50);
-        }
-        document.addEventListener('DOMContentLoaded', function() {
-            showSection('portfolio');
+        document.querySelectorAll('[data-target]').forEach(el=>{
+            el.addEventListener('click',function(e){ e.preventDefault(); const t=this.dataset.target; if(t) showTarget(t); });
+        });
+        // default
+        showTarget('portfolio');
+
+        // Contact form handler — use same relay service (Formspree) preserved from original
+        document.getElementById('contactForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            const form = e.target;
+            const thankYou = document.getElementById('thankYouMsg');
+            fetch('https://formspree.io/f/mwprklzn', {
+                method: 'POST', headers: {'Accept':'application/json'}, body: new FormData(form)
+            }).then(r=>{
+                if(r.ok){ form.style.display='none'; thankYou.style.display='block'; }
+                else { alert('Error sending message — please try again later.'); }
+            }).catch(()=>{ alert('Error sending message — please try again later.'); });
         });
 
-        // Contact form handler (Formspree example)
-        document.addEventListener('DOMContentLoaded', function() {
-            const form = document.getElementById('contactForm');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    // Hide form, show thank you after successful send
-                    const thankYou = document.getElementById('thankYouMsg');
-                    fetch('https://formspree.io/f/mwprklzn', {
-                        method: 'POST',
-                        headers: { 'Accept': 'application/json' },
-                        body: new FormData(form)
-                    }).then(function(response) {
-                        if (response.ok) {
-                            form.style.display = 'none';
-                            thankYou.style.display = 'block';
-                        } else {
-                            alert('There was an error sending your message. Please try again later.');
-                        }
-                    }).catch(function() {
-                        alert('There was an error sending your message. Please try again later.');
-                    });
-                });
-            }
-        });
-
-        // --- Repository listing for cybersecurity PDFs ---
+        // GitHub repo listing (preserve original dynamic behavior)
         const GITHUB_OWNER = 'erpursuit';
         const GITHUB_REPO = 'portfolio';
         const GITHUB_BRANCH = 'main';
 
-        function parseDateFromName(name) {
-            // Try multiple date formats in filename
-            // YYYY-MM-DD or YYYY_MM_DD
+        function parseDateFromName(name){
             let m = name.match(/(20\d{2})[\-_](0?[1-9]|1[0-2])[\-_](0?[1-9]|[12]\d|3[01])/);
-            if (m) return new Date(`${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`);
-            // MM-DD-YYYY or M-D-YYYY or MM_DD_YYYY
+            if(m) return new Date(`${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`);
             m = name.match(/(0?[1-9]|1[0-2])[\-_](0?[1-9]|[12]\d|3[01])[\-_](20\d{2})/);
-            if (m) return new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`);
-            // M/D/YYYY or MM/DD/YYYY (slashes sometimes replaced by hyphens on upload)
+            if(m) return new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`);
             m = name.match(/(0?[1-9]|1[0-2])[\/]?(0?[1-9]|[12]\d|3[01])[\/]?(20\d{2})/);
-            if (m) return new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`);
+            if(m) return new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`);
             return null;
         }
 
-        async function listRepoPdfs(path, listElementId) {
+        async function listRepoPdfs(path, listElementId){
             const api = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodeURIComponent(path)}?ref=${GITHUB_BRANCH}`;
-            try {
+            try{
                 const res = await fetch(api);
-                if (!res.ok) {
-                    console.warn('Could not fetch', api, res.status);
-                    return;
-                }
+                if(!res.ok) return;
                 const items = await res.json();
-                const files = items.filter(it => it.type === 'file' && it.name.toLowerCase().endsWith('.pdf'))
-                    .map(it => ({name: it.name, url: it.download_url}));
-                // Attach parsed date where possible
-                files.forEach(f => {
-                    const d = parseDateFromName(f.name);
-                    f.date = d ? d.getTime() : 0;
-                });
-                // Sort newest first by parsed date, fallback to name desc
-                files.sort((a,b) => {
-                    if (a.date !== b.date) return b.date - a.date;
-                    return b.name.localeCompare(a.name);
-                });
+                const files = items.filter(it=>it.type==='file' && it.name.toLowerCase().endsWith('.pdf')).map(it=>({name:it.name,url:it.download_url}));
+                files.forEach(f=>{ const d=parseDateFromName(f.name); f.date = d?d.getTime():0; });
+                files.sort((a,b)=>{ if(a.date!==b.date) return b.date-a.date; return b.name.localeCompare(a.name); });
                 const listEl = document.getElementById(listElementId);
-                if (!listEl) return;
-                if (files.length === 0) {
-                    listEl.innerHTML = '<li>Coming soon!</li>';
-                    return;
-                }
-                listEl.innerHTML = '';
-                files.forEach(f => {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.href = f.url;
-                    a.target = '_blank';
-                    a.rel = 'noopener';
-                    a.textContent = f.name;
-                    li.appendChild(a);
-                    listEl.appendChild(li);
-                });
-            } catch (err) {
-                console.error('Error listing repo files for', path, err);
-            }
+                if(!listEl) return;
+                if(files.length===0){ listEl.innerHTML='<li style="color:var(--muted)">Coming soon!</li>'; return; }
+                listEl.innerHTML='';
+                files.forEach(f=>{ const li=document.createElement('li'); const a=document.createElement('a'); a.href=f.url; a.target='_blank'; a.rel='noopener'; a.textContent=f.name; a.style.color='var(--muted)'; li.appendChild(a); listEl.appendChild(li); });
+            }catch(err){ console.error('Error listing repo files',err); }
         }
-
-        // Populate lists on load
-        document.addEventListener('DOMContentLoaded', function() {
-            listRepoPdfs('tryhackme', 'tryhackme-list');
-        });
+        // populate
+        window.addEventListener('load', ()=>{ listRepoPdfs('tryhackme','tryhackme-list'); });
     </script>
 </body>
 </html>
