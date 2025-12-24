@@ -270,12 +270,20 @@
         const GITHUB_BRANCH = 'main';
 
         function parseDateFromName(name){
-            let m = name.match(/(20\d{2})[\-_](0?[1-9]|1[0-2])[\-_](0?[1-9]|[12]\d|3[01])/);
+            // Normalize whitespace
+            name = String(name || '').trim();
+            // YYYY-MM-DD, YYYY_MM_DD, YYYY.MM.DD or contiguous YYYYMMDD
+            let m = name.match(/(20\d{2})[.\-_]?(0?[1-9]|1[0-2])[.\-_]?(0?[1-9]|[12]\d|3[01])/);
             if(m) return new Date(`${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`);
-            m = name.match(/(0?[1-9]|1[0-2])[\-_](0?[1-9]|[12]\d|3[01])[\-_](20\d{2})/);
+            // MM-DD-YYYY, MM_DD_YYYY, MM/DD/YYYY (common US-style filenames)
+            m = name.match(/(0?[1-9]|1[0-2])[.\-\/_]?(0?[1-9]|[12]\d|3[01])[.\-\/_]?(20\d{2})/);
             if(m) return new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`);
-            m = name.match(/(0?[1-9]|1[0-2])[\/]?(0?[1-9]|[12]\d|3[01])[\/]?(20\d{2})/);
-            if(m) return new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`);
+            // Contiguous 8-digit YYYYMMDD
+            m = name.match(/\b(20\d{6})\b/);
+            if(m){ const s = m[1]; return new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`); }
+            // Fallback: look for any 4-digit year and two nearby 1-2 digit month/day
+            m = name.match(/(20\d{2}).{0,3}(0?[1-9]|1[0-2]).{0,3}(0?[1-9]|[12]\d|3[01])/);
+            if(m) return new Date(`${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`);
             return null;
         }
 
