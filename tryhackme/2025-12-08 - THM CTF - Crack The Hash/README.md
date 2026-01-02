@@ -10,13 +10,11 @@ Short summary: This TryHackMe CTF challenge focused on cracking weak password ha
 - Time observed: 2025-12-08
 - Source: TryHackMe CTF exercise
 
-![Alert View](screenshots/step-01-alert.png)
 
 ## Triage / Logs
 
 - Evidence gathered from logs and services during the exercise.
 
-![Logs View](screenshots/step-02-logs.png)
 
 ## Data Sources
 
@@ -34,7 +32,6 @@ Short summary: This TryHackMe CTF challenge focused on cracking weak password ha
 
 - Actions taken: enumerated hash type, attempted cracking with common wordlists, escalated privileges after obtaining credentials.
 
-![Analysis View](screenshots/step-03-analysis.png)
 
 ## MITRE ATT&CK
 
@@ -45,7 +42,6 @@ Short summary: This TryHackMe CTF challenge focused on cracking weak password ha
 
 - Decision: Contain and remediate weak credentials; rotate compromised accounts; apply stronger hashing / complexity controls for real environments.
 
-![Decision View](screenshots/step-04-decision.png)
 
 ## Response / Escalation
 
@@ -63,4 +59,4 @@ Short summary: This TryHackMe CTF challenge focused on cracking weak password ha
 
 ## References
 
-- Original file: 2025-12-08 - THM CTF - Crack The Hash.pdf (archived)
+
