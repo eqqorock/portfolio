@@ -4,7 +4,7 @@
 ```markdown
 # persistence-mechanism-detected
 
-**Date:** 2026-01-03
+**Date:** 2025-12-15
 
 ## Investigation Summary
 
