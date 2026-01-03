@@ -4,8 +4,9 @@ Directory structure (by category):
 
 - `credential-access/` — scenarios involving credential theft, password cracking, or compromised accounts.
 - `authentication/` — authentication-related alerts, unusual logins, MFA failures, brute-force attempts.
-- `endpoint-activity/` — host/process/activity-level alerts such as persistence, suspicious execution, or lateral movement.
-- `network-activity/` — network-level detections like C2, scanning, or unusual outbound traffic.
+- `endpoint/` — host/process/activity-level alerts such as persistence, suspicious execution, or lateral movement.
+- `network/` — network-level detections like C2, scanning, or unusual outbound traffic.
+- `email-security/` — phishing and email-based attack scenarios and triage writeups.
 
 Screenshot naming:
 
@@ -24,7 +25,9 @@ Current scenarios by category:
 
 - credential-access/
 	- `weak-credential-detection.md` (migrated from 2025-12-08 - THM CTF - Crack The Hash)
-- endpoint-activity/
+- endpoint/
 	- `persistence-mechanism-detected.md` (migrated from 2025-12-23 - THM CTF - Shadow Trace)
+- email-security/
+	- `phishing-analysis-fundamentals.md` (new: phishing triage fundamentals)
 
 When you add or update scenarios, push them to the `main` branch and keep screenshots referenced with relative paths.
