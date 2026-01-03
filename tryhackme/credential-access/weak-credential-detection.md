@@ -1,5 +1,7 @@
 # weak-credential-detection
 
+**Date:** 2026-01-03
+
 ## Investigation Summary
 
 Short summary: This TryHackMe CTF challenge focused on cracking weak password hashes to gain initial access. The writeup below preserves the original observations and steps and is formatted for SOC L1 consumption.
