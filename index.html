@@ -287,33 +287,41 @@
             return null;
         }
 
+        // Recursively list all markdown files under `path` (excluding README.md)
         async function listRepoWriteups(path, listElementId){
-            const rootApi = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodeURIComponent(path)}?ref=${GITHUB_BRANCH}`;
-            try{
-                const res = await fetch(rootApi);
-                if(!res.ok) return;
-                const items = await res.json();
-                // Find directories (writeups) and any README.md files at root
-                const writeups = [];
-                for(const it of items){
-                    if(it.type === 'file' && it.name.toLowerCase() === 'readme.md'){
-                        writeups.push({name:it.name, url:it.html_url, date: parseDateFromName(it.name)||0});
-                    } else if(it.type === 'dir'){
-                        // check if the dir contains a README.md
-                        const r = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${encodeURIComponent(path+'/'+it.name)}/README.md?ref=${GITHUB_BRANCH}`);
-                        if(r.ok){
-                            const rd = await r.json();
-                            writeups.push({name: it.name, url: rd.html_url, date: parseDateFromName(it.name)? parseDateFromName(it.name).getTime():0});
+            const apiBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
+            const results = [];
+            async function walk(p){
+                try{
+                    const res = await fetch(`${apiBase}/${encodeURIComponent(p)}?ref=${GITHUB_BRANCH}`);
+                    if(!res.ok) return;
+                    const items = await res.json();
+                    for(const it of items){
+                        if(it.type === 'file' && /\.md$/i.test(it.name)){
+                            if(it.name.toLowerCase() === 'readme.md') continue;
+                            results.push({name: it.name, path: p + '/' + it.name, url: it.html_url});
+                        } else if(it.type === 'dir'){
+                            await walk(p + '/' + it.name);
                         }
                     }
-                }
-                writeups.sort((a,b)=>{ if(a.date!==b.date) return b.date-a.date; return b.name.localeCompare(a.name); });
-                const listEl = document.getElementById(listElementId);
-                if(!listEl) return;
-                if(writeups.length===0){ listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; return; }
-                listEl.innerHTML = '';
-                writeups.forEach(w=>{ const li=document.createElement('li'); const a=document.createElement('a'); a.href = w.url; a.target='_blank'; a.rel='noopener'; a.textContent = w.name; a.style.color='var(--muted)'; li.appendChild(a); listEl.appendChild(li); });
-            }catch(err){ console.error('Error listing writeups', err); }
+                }catch(e){ console.error('walk error', e); }
+            }
+            await walk(path);
+            results.sort((a,b)=> a.path.localeCompare(b.path));
+            const listEl = document.getElementById(listElementId);
+            if(!listEl) return;
+            if(results.length===0){ listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; return; }
+            listEl.innerHTML = '';
+            results.forEach(r=>{
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = r.url; a.target = '_blank'; a.rel = 'noopener';
+                // show directory/file relative to requested path for clarity
+                a.textContent = r.path.replace(path + '/', '');
+                a.style.color = 'var(--muted)';
+                li.appendChild(a);
+                listEl.appendChild(li);
+            });
         }
         // populate tryhackme writeups from the repository branch containing the latest changes
         window.addEventListener('load', ()=>{ listRepoWriteups('tryhackme','tryhackme-list'); });
