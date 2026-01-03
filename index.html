@@ -287,37 +287,80 @@
             return null;
         }
 
-        // Recursively list all markdown files under `path` (excluding README.md)
+        // Recursively list all markdown files under `path`, enrich with latest commit date and first H1
         async function listRepoWriteups(path, listElementId){
-            const apiBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents`;
+            const apiBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
             const results = [];
+
             async function walk(p){
                 try{
-                    const res = await fetch(`${apiBase}/${encodeURIComponent(p)}?ref=${GITHUB_BRANCH}`);
+                    const res = await fetch(`${apiBase}/contents/${encodeURIComponent(p)}?ref=${GITHUB_BRANCH}`);
                     if(!res.ok) return;
                     const items = await res.json();
                     for(const it of items){
                         if(it.type === 'file' && /\.md$/i.test(it.name)){
                             if(it.name.toLowerCase() === 'readme.md') continue;
-                            results.push({name: it.name, path: p + '/' + it.name, url: it.html_url});
+                            results.push({name: it.name, path: `${p}/${it.name}`, url: it.html_url});
                         } else if(it.type === 'dir'){
-                            await walk(p + '/' + it.name);
+                            await walk(`${p}/${it.name}`);
                         }
                     }
                 }catch(e){ console.error('walk error', e); }
             }
+
             await walk(path);
-            results.sort((a,b)=> a.path.localeCompare(b.path));
+
+            // Enrich each file: get latest commit date and first H1 title
+            const enriched = await Promise.all(results.map(async r => {
+                try{
+                    // get latest commit touching the file
+                    const commitsRes = await fetch(`${apiBase}/commits?path=${encodeURIComponent(r.path)}&sha=${GITHUB_BRANCH}&per_page=1`);
+                    let date = null;
+                    if(commitsRes.ok){
+                        const commits = await commitsRes.json();
+                        if(Array.isArray(commits) && commits.length) date = commits[0].commit && commits[0].commit.author && commits[0].commit.author.date;
+                    }
+                    // get file content to extract first H1
+                    const contentRes = await fetch(`${apiBase}/contents/${encodeURIComponent(r.path)}?ref=${GITHUB_BRANCH}`);
+                    let title = r.name.replace(/\.md$/i,'');
+                    if(contentRes.ok){
+                        const contentJson = await contentRes.json();
+                        if(contentJson && contentJson.content){
+                            try{
+                                const text = atob(contentJson.content.replace(/\n/g,''));
+                                const m = text.match(/^#\s+(.+)$/m);
+                                if(m) title = m[1].trim();
+                            }catch(e){ /* ignore decode errors */ }
+                        }
+                    }
+                    // category = parent folder (humanized)
+                    const parts = r.path.split('/');
+                    // path begins with 'tryhackme' so parent folder is parts[1]
+                    const categoryRaw = parts.length >= 3 ? parts[1] : 'uncategorized';
+                    const category = categoryRaw.replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+                    return {path: r.path, url: r.url, date: date ? new Date(date) : null, category, title};
+                }catch(e){ console.error('enrich error', e); return {path:r.path,url:r.url, date:null, category:'', title:r.name}; }
+            }));
+
+            // sort by date desc (nulls last), then by path
+            enriched.sort((a,b)=>{
+                if(a.date && b.date) return b.date - a.date;
+                if(a.date) return -1;
+                if(b.date) return 1;
+                return a.path.localeCompare(b.path);
+            });
+
             const listEl = document.getElementById(listElementId);
             if(!listEl) return;
-            if(results.length===0){ listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; return; }
+            if(enriched.length===0){ listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; return; }
             listEl.innerHTML = '';
-            results.forEach(r=>{
+
+            enriched.forEach(item=>{
                 const li = document.createElement('li');
                 const a = document.createElement('a');
-                a.href = r.url; a.target = '_blank'; a.rel = 'noopener';
-                // show directory/file relative to requested path for clarity
-                a.textContent = r.path.replace(path + '/', '');
+                a.href = item.url; a.target = '_blank'; a.rel = 'noopener';
+                const dateText = item.date ? item.date.toISOString().slice(0,10) : '0000-00-00';
+                a.textContent = `${dateText} — ${item.category} / ${item.title}`;
                 a.style.color = 'var(--muted)';
                 li.appendChild(a);
                 listEl.appendChild(li);
