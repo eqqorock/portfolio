@@ -310,45 +310,47 @@
 
             await walk(path);
 
-            // Enrich each file: get latest commit date and first H1 title
-            const enriched = await Promise.all(results.map(async r => {
+            // Enrich each file: read content, extract first H1 and the static Date line directly under it
+            const enriched = [];
+            for(const r of results){
                 try{
-                    // get latest commit touching the file
-                    const commitsRes = await fetch(`${apiBase}/commits?path=${encodeURIComponent(r.path)}&sha=${GITHUB_BRANCH}&per_page=1`);
-                    let date = null;
-                    if(commitsRes.ok){
-                        const commits = await commitsRes.json();
-                        if(Array.isArray(commits) && commits.length) date = commits[0].commit && commits[0].commit.author && commits[0].commit.author.date;
-                    }
-                    // get file content to extract first H1
                     const contentRes = await fetch(`${apiBase}/contents/${encodeURIComponent(r.path)}?ref=${GITHUB_BRANCH}`);
+                    if(!contentRes.ok){ console.warn('Could not fetch', r.path); continue; }
+                    const contentJson = await contentRes.json();
+                    const b64 = (contentJson.content || '').replace(/\s/g,'');
+                    let text = '';
+                    try{ text = atob(b64); } catch(e){ try{ text = decodeURIComponent(escape(atob(b64))); }catch(e2){ text = ''; } }
+                    if(!text) { console.warn('Empty text for', r.path); continue; }
+
+                    // split into lines to locate H1 and directly-following Date line
+                    const lines = text.split(/\r?\n/);
                     let title = r.name.replace(/\.md$/i,'');
-                    if(contentRes.ok){
-                        const contentJson = await contentRes.json();
-                        if(contentJson && contentJson.content){
-                            try{
-                                const text = atob(contentJson.content.replace(/\n/g,''));
-                                const m = text.match(/^#\s+(.+)$/m);
-                                if(m) title = m[1].trim();
-                            }catch(e){ /* ignore decode errors */ }
+                    let dateStr = null;
+                    for(let i=0;i<lines.length;i++){
+                        const h1m = lines[i].match(/^#\s+(.+)$/);
+                        if(h1m){
+                            title = h1m[1].trim();
+                            // look at next non-empty line for Date
+                            let j = i+1;
+                            while(j < lines.length && lines[j].trim() === '') j++;
+                            if(j < lines.length){
+                                const dm = lines[j].match(/^\*\*Date:\*\*\s*(\d{4}-\d{2}-\d{2})\s*$/);
+                                if(dm) dateStr = dm[1];
+                            }
+                            break;
                         }
                     }
-                    // category = parent folder (humanized)
+                    if(!dateStr){ console.warn('Missing Date field for', r.path); continue; }
+                    const date = new Date(dateStr + 'T00:00:00Z');
                     const parts = r.path.split('/');
-                    // path begins with 'tryhackme' so parent folder is parts[1]
                     const categoryRaw = parts.length >= 3 ? parts[1] : 'uncategorized';
                     const category = categoryRaw.replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
-                    return {path: r.path, url: r.url, date: date ? new Date(date) : null, category, title};
-                }catch(e){ console.error('enrich error', e); return {path:r.path,url:r.url, date:null, category:'', title:r.name}; }
-            }));
+                    enriched.push({path: r.path, url: r.url, date, category, title});
+                }catch(e){ console.error('enrich error', e); continue; }
+            }
 
-            // sort by date desc (nulls last), then by path
-            enriched.sort((a,b)=>{
-                if(a.date && b.date) return b.date - a.date;
-                if(a.date) return -1;
-                if(b.date) return 1;
-                return a.path.localeCompare(b.path);
-            });
+            // sort by static date (most recent first)
+            enriched.sort((a,b)=> b.date - a.date);
 
             const listEl = document.getElementById(listElementId);
             if(!listEl) return;
@@ -359,7 +361,7 @@
                 const li = document.createElement('li');
                 const a = document.createElement('a');
                 a.href = item.url; a.target = '_blank'; a.rel = 'noopener';
-                const dateText = item.date ? item.date.toISOString().slice(0,10) : '0000-00-00';
+                const dateText = item.date.toISOString().slice(0,10);
                 a.textContent = `${dateText} — ${item.category} / ${item.title}`;
                 a.style.color = 'var(--muted)';
                 li.appendChild(a);
