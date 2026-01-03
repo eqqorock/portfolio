@@ -1,4 +1,6 @@
-**Alert Triage: Phishing Email Analysis**
+# Alert Triage: Phishing Email Analysis
+
+**Date:** 2026-01-03
 
 **Summary:**
 - **Incident:** User-reported suspicious email suspected phishing.
