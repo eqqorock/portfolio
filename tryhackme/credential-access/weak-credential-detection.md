@@ -1,4 +1,4 @@
-# 2025-12-08 - THM CTF - Crack The Hash
+# weak-credential-detection
 
 ## Investigation Summary
 

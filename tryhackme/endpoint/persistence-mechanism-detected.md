@@ -1,4 +1,8 @@
-# 2025-12-23 - THM CTF - Shadow Trace
+```markdown
+# persistence-mechanism-detected
+
+```markdown
+# persistence-mechanism-detected
 
 ## Investigation Summary
 
@@ -10,11 +14,13 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 - Time observed: 2025-12-23
 - Source: TryHackMe CTF exercise
 
+![Alert View](screenshots/step-01-alert.png)
 
 ## Triage / Logs
 
 - Evidence gathered from logs and system artefacts during the exercise.
 
+![Logs View](screenshots/step-02-logs.png)
 
 ## Data Sources
 
@@ -32,6 +38,7 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 
 - Actions taken: enumerated services, discovered persistence mechanism, validated impact and scope.
 
+![Analysis View](screenshots/step-03-analysis.png)
 
 ## MITRE ATT&CK
 
@@ -42,6 +49,7 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 
 - Decision: Remove persistence, rotate affected credentials, monitor for recurrence.
 
+![Decision View](screenshots/step-04-decision.png)
 
 ## Response / Escalation
 
@@ -58,37 +66,7 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 
 ## References
 
-# 2025-12-23 - THM CTF - Shadow Trace
+- Original file: 2025-12-23 - THM CTF - Shadow Trace.pdf (archived)
 
-## Investigation Summary
-
-Short summary: This TryHackMe CTF challenge involved tracing suspicious lateral movement and investigating telemetry to identify the attack path. The writeup is organized for SOC L1 review.
-
-## Detection / Alert
-
-- Alert name: Suspicious process execution / lateral movement indicators
+```
 - Time observed: 2025-12-23
-- Source: TryHackMe CTF exercise
-
-
-## Triage / Logs
-
-- Logs reviewed: system event logs, process lists, network connections.
-
-
-## Analysis
-
-- Analysis notes: identified suspicious binaries, correlated with C2 patterns, collected hashes and IOC list.
-
-
-## Decision / Remediation
-
-- Decision: Isolate affected host, kill malicious process, rebuild if persistence confirmed.
-
-
-## Artifacts
-
-- Tools and outputs preserved; flags and proofs included where relevant.
-
-## References
-
