@@ -322,20 +322,28 @@
                     try{ text = atob(b64); } catch(e){ try{ text = decodeURIComponent(escape(atob(b64))); }catch(e2){ text = ''; } }
                     if(!text) { console.warn('Empty text for', r.path); continue; }
 
-                    // split into lines to locate H1 and directly-following Date line
+                    // split into lines to locate H1 and directly-following Date line, ignoring fenced code blocks
                     const lines = text.split(/\r?\n/);
                     let title = r.name.replace(/\.md$/i,'');
                     let dateStr = null;
+                    let inCode = false;
                     for(let i=0;i<lines.length;i++){
-                        const h1m = lines[i].match(/^#\s+(.+)$/);
+                        const line = lines[i];
+                        // toggle fenced code block state when encountering ```
+                        if(line.trim().startsWith('```')){ inCode = !inCode; continue; }
+                        if(inCode) continue;
+                        const h1m = line.match(/^#\s+(.+)$/);
                         if(h1m){
                             title = h1m[1].trim();
-                            // look at next non-empty line for Date
+                            // look at next non-empty, non-code fence line for Date
                             let j = i+1;
-                            while(j < lines.length && lines[j].trim() === '') j++;
-                            if(j < lines.length){
-                                const dm = lines[j].match(/^\*\*Date:\*\*\s*(\d{4}-\d{2}-\d{2})\s*$/);
+                            while(j < lines.length){
+                                const nxt = lines[j].trim();
+                                if(nxt === '') { j++; continue; }
+                                if(nxt.startsWith('```')){ break; }
+                                const dm = nxt.match(/^\*\*Date:\*\*\s*(\d{4}-\d{2}-\d{2})\s*$/);
                                 if(dm) dateStr = dm[1];
+                                break;
                             }
                             break;
                         }
