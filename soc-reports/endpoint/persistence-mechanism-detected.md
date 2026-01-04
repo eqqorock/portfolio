@@ -1,5 +1,4 @@
-```markdown
-# persistence-mechanism-detected
+﻿# persistence-mechanism-detected
 
 **Date:** 2025-12-15
 
@@ -67,4 +66,3 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 
 - Original file: 2025-12-23 - THM CTF - Shadow Trace.pdf (archived)
 
-```
