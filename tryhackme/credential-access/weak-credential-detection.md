@@ -1,10 +1,10 @@
-# weak-credential-detection
+﻿# weak-credential-detection
 
 **Date:** 2025-12-25
 
 ## Investigation Summary
 
-Short summary: This TryHackMe CTF challenge focused on cracking weak password hashes to gain initial access. The writeup below preserves the original observations and steps and is formatted for SOC L1 consumption.
+Short summary: This TryHackMe CTF challenge focused on cracking weak password hashes to gain initial access.
 
 ## Detection / Alert
 
@@ -12,11 +12,9 @@ Short summary: This TryHackMe CTF challenge focused on cracking weak password ha
 - Time observed: 2025-12-08
 - Source: TryHackMe CTF exercise
 
-
 ## Triage / Logs
 
 - Evidence gathered from logs and services during the exercise.
-
 
 ## Data Sources
 
@@ -34,7 +32,6 @@ Short summary: This TryHackMe CTF challenge focused on cracking weak password ha
 
 - Actions taken: enumerated hash type, attempted cracking with common wordlists, escalated privileges after obtaining credentials.
 
-
 ## MITRE ATT&CK
 
 - Tactic: Credential Access
@@ -43,7 +40,6 @@ Short summary: This TryHackMe CTF challenge focused on cracking weak password ha
 ## Decision / Remediation
 
 - Decision: Contain and remediate weak credentials; rotate compromised accounts; apply stronger hashing / complexity controls for real environments.
-
 
 ## Response / Escalation
 
@@ -60,5 +56,3 @@ Short summary: This TryHackMe CTF challenge focused on cracking weak password ha
 - Extracted flags and important outputs are preserved here.
 
 ## References
-
-
