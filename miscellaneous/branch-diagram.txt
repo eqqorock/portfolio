@@ -1,0 +1,70 @@
+* 6837bbe (HEAD -> main, origin/main, origin/HEAD) Normalize writeups: remove SOC sentence + fix formatting
+* fb37f79 Normalize weak-credential-detection.md formatting (remove code fences)
+* c7ae759 Set static Dates for tryhackme writeups (weak-credential:2025-12-25, persistence:2025-12-15)
+* e7330f2 Site: ignore H1s inside code fences when extracting Date/title
+* 3bbecc9 Add static Date to existing tryhackme writeups for site ingestion
+* 6a4643c Add static Date and H1 to phishing-analysis-fundamentals.md for site ingestion
+* bb71aab Site: use static Date field under H1 for chronological tryhackme listing; exclude files missing Date
+* c1a8d95 Site: show chronological tryhackme writeups using latest commit date and H1 title
+* 902f441 Site: list all tryhackme markdowns under Cybersecurity
+*   83960b2 Resolve merge conflicts: integrate tryhackme updates
+|\  
+| * 73511de (origin/thm-md-refactor-branch, thm-md-refactor-branch) Site: point tryhackme listing to main branch
+| * 266eb30 Site: show tryhackme writeups from thm-md-refactor-branch
+| * 014f522 Remove empty tryhackme/endpoint-activity directory
+| * 61cef44 Organize tryhackme categories; add email-security phishing analysis; rename report
+| * b47c71e Remove screenshots from tryhackme scenario folders
+| * c6189e3 Remove unnecessary screenshots from tryhackme writeups
+| * 6d3beec Reorganize TryHackMe writeups into SOC categories; remove original folders
+* | 5c91ad1 Update README.md for Shadow Trace CTF
+* | 432fe0f Clean up README by removing image placeholders
+* | 6c41039 Revise README for SOC L1 writeup structure
+|/  
+* 9a6f96d Refactor TryHackMe writeups to Markdown; add SOC L1 sections; archive PDFs
+* 4887034 Enhance parseDateFromName to support more filename date formats for reverse-chronological TryHackMe PDF listing
+*   d3a1868 Merge branch 'main' of https://github.com/eqqorock/portfolio
+|\  
+| * 2104bda Add files via upload
+| * 0a78c64 Delete tryhackme/2025-12-8 - THM CTF - Crack The Hash.pdf
+| * 516d388 Add files via upload
+| * 34670d1 Delete tryhackme/12-18-2025 - THM CTF - Crack The Hash.pdf
+| * bbdc894 Delete tryhackme/12-18-2025 - THM CTF - Crack The Box.pdf
+| * 9b8aaa5 Add files via upload
+* | a762ec6 update
+* | 0885329 updated file names and added Shadow trace.
+|/  
+* d165b19 Mobile: hide quick-links when opening contact on small screens; restore on exit
+* 210cb5d Mobile: place contact above quick links; footer text update
+* b7acdcb Fix quick-links behavior/color; move contact form to left
+* 8f6b62a Redesign: professional cybersecurity layout; backup original index.html
+* fdeddb5 Show Portfolio by default in HTML; hide About section
+* 599b5a1 changed landing section
+* 39f0945 Hide Splunk display; move TryHackMe under Cybersecurity; remove placeholder text
+* ea4772c Enable TryHackMe/Splunk PDF listing: add placeholders and use 'Coming soon!' fallback
+* 1ef58f0 Add files via upload
+* 0d65586 fixed typo
+* 3f9eee2 Update index.html
+* a4c79cb Update index.html
+* b19e1bf Update portfolio: add cybersecurity subsections, content tweaks, and README placeholders
+* 113933e updated cybersecurity section
+* 905a426 Add AI Workout Planner link to Miscellaneous section
+* 04c15a0 Fix HTML encoding issues in index.html
+* 2829ebc UI, Difficulty and Size
+* 0690684 Edited Portfolio section
+* d5bea51 Update index.html
+* b5ba972 Update index.html
+* 74e79b8 Update index.html
+* 2b2b8e7 Add files via upload
+* c55f207 Update index.html
+* fe35d17 Add files via upload
+* 729e74a Update index.html
+* d10b6de Add files via upload
+* c60b8ad Add files via upload
+* 50de662 Update index.html
+* 9039036 Add files via upload
+* 381d66c Update index.html
+* ef6376f Add files via upload
+* 9541f7 Update and rename Tutorial.html to index.html
+* 5325e9a Update README.md
+* ce6546e Add files via upload
+* 4b65f58 Initial commit

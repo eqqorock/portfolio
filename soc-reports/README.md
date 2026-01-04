@@ -24,10 +24,10 @@ File naming and placement guidance:
 Current scenarios by category:
 
 - credential-access/
-	- `weak-credential-detection.md` (migrated from 2025-12-08 - THM CTF - Crack The Hash)
+	- `weak-credential-detection.md` (migrated from TryHackMe content)
 - endpoint/
-	- `persistence-mechanism-detected.md` (migrated from 2025-12-23 - THM CTF - Shadow Trace)
+	- `persistence-mechanism-detected.md` (migrated from TryHackMe content)
 - email-security/
-	- `phishing-analysis-fundamentals.md` (new: phishing triage fundamentals)
+	- `phishing-analysis-fundamentals.md` (migrated from TryHackMe content)
 
 When you add or update scenarios, push them to the `main` branch and keep screenshots referenced with relative paths.

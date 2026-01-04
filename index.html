@@ -95,9 +95,9 @@
                 <article id="portfolio" class="panel">
                     <div class="section-title"><h2 style="margin:0">Portfolio</h2></div>
                     <div id="cybersecurity">
-                        <h3>Cybersecurity</h3>
-                        <p style="color:var(--muted)">TryHackMe CTF exercises and module writeups.</p>
-                        <ul id="tryhackme-list" style="margin-top:12px;color:var(--muted)"></ul>
+                        <h3>SOC Reports (derived from hands-on labs and simulations)</h3>
+                            <p style="color:var(--muted)">SOC-style alert triage writeups derived from hands-on labs, CTFs, and simulations.</p>
+                            <ul id="soc-reports-list" style="margin-top:12px;color:var(--muted)"></ul>
                     </div>
 
                     <div id="games" style="margin-top:18px">
@@ -376,8 +376,8 @@
                 listEl.appendChild(li);
             });
         }
-        // populate tryhackme writeups from the repository branch containing the latest changes
-        window.addEventListener('load', ()=>{ listRepoWriteups('tryhackme','tryhackme-list'); });
+        // populate SOC report writeups from the repository branch containing the latest changes
+        window.addEventListener('load', ()=>{ listRepoWriteups('soc-reports','soc-reports-list'); });
         // restore contact on resize (desktop/tablet)
         window.addEventListener('resize', ()=>{ if(window.innerWidth > 900) restoreContact(); });
     </script>

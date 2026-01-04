@@ -1,0 +1,30 @@
+Folder PATH listing
+Volume serial number is 62BE-5D0D
+C:.
+	branch-diagram.txt
+	index.html
+	minesweeper.html
+	README.md
+	structure.txt
+
+	backups\
+		index.html.bak
+
+	reports\
+		Phishing Analysis Fundamentals.md
+		phishing-triage.md
+
+	scripts\
+		link_check.ps1
+
+	splunk-labs\
+		README.md
+
+	soc-reports\
+		README.md
+		credential-access\
+			weak-credential-detection.md
+		endpoint\
+			persistence-mechanism-detected.md
+		email-security\
+			phishing-analysis-fundamentals.md
