@@ -1,14 +1,10 @@
-```markdown
-# persistence-mechanism-detected
-
-```markdown
 # persistence-mechanism-detected
 
 **Date:** 2025-12-15
 
 ## Investigation Summary
 
-Short summary: This TryHackMe CTF challenge investigated suspicious persistence and lateral movement techniques simulated in the exercise. The writeup below preserves the original notes and is formatted for SOC L1 consumption.
+Short summary: This TryHackMe CTF challenge investigated suspicious persistence and lateral movement techniques simulated in the exercise.
 
 ## Detection / Alert
 
@@ -69,6 +65,3 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 ## References
 
 - Original file: 2025-12-23 - THM CTF - Shadow Trace.pdf (archived)
-
-```
-- Time observed: 2025-12-23
