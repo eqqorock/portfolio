@@ -1,10 +1,13 @@
 ﻿# Alert Triage: Phishing Email Analysis
 
 **Date:** 2026-01-03
+# Alert Triage: Phishing Email Analysis
+
+**Date:** 2026-01-03
 
 **Summary:**
 - **Incident:** User-reported suspicious email suspected phishing.
-- **Outcome:** Classified as True Positive â€” Medium severity.
+- **Outcome:** Classified as True Positive — Medium severity.
 
 **Sources Reviewed:**
 - **Raw email headers:** From, To, Subject, Date, Return-Path, Reply-To, sender IP

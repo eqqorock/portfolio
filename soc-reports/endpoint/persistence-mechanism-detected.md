@@ -9,6 +9,17 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 ## Detection / Alert
 
 - Alert name: Suspicious persistence observed
+# persistence-mechanism-detected
+
+**Date:** 2025-12-15
+
+## Investigation Summary
+
+Short summary: This TryHackMe CTF challenge investigated suspicious persistence and lateral movement techniques simulated in the exercise.
+
+## Detection / Alert
+
+- Alert name: Suspicious persistence observed
 - Time observed: 2025-12-23
 - Source: TryHackMe CTF exercise
 
