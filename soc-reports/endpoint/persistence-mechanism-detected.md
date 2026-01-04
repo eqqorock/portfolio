@@ -66,3 +66,4 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 
 - Original file: 2025-12-23 - THM CTF - Shadow Trace.pdf (archived)
 
+
