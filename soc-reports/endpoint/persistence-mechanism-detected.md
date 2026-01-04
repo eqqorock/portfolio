@@ -23,13 +23,11 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 - Time observed: 2025-12-23
 - Source: TryHackMe CTF exercise
 
-![Alert View](screenshots/step-01-alert.png)
 
 ## Triage / Logs
 
 - Evidence gathered from logs and system artefacts during the exercise.
 
-![Logs View](screenshots/step-02-logs.png)
 
 ## Data Sources
 
@@ -47,7 +45,6 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 
 - Actions taken: enumerated services, discovered persistence mechanism, validated impact and scope.
 
-![Analysis View](screenshots/step-03-analysis.png)
 
 ## MITRE ATT&CK
 
@@ -58,7 +55,6 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 
 - Decision: Remove persistence, rotate affected credentials, monitor for recurrence.
 
-![Decision View](screenshots/step-04-decision.png)
 
 ## Response / Escalation
 
