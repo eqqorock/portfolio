@@ -1,4 +1,5 @@
-﻿# weak-credential-detection
+```markdown
+# weak-credential-detection
 
 **Date:** 2025-12-25
 
@@ -56,3 +57,5 @@ Short summary: This TryHackMe CTF challenge focused on cracking weak password ha
 - Extracted flags and important outputs are preserved here.
 
 ## References
+
+```

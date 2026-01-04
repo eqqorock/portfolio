@@ -1,3 +1,4 @@
+```markdown
 # Alert Triage: Phishing Email Analysis
 
 **Date:** 2026-01-03
@@ -59,3 +60,5 @@
 - Consider sender authentication monitoring (DMARC, DKIM, SPF) enforcement and reporting if not already strict.
 
 *Source: Hands-on security lab (phishing email analysis simulation)*
+
+```
