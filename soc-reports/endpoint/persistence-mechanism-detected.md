@@ -26,7 +26,7 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 
 ## Triage / Logs
 
-- Evidence gathered from logs and system artefacts during the exercise.
+- Evidence gathered from logs and system artifacts during the exercise.
 
 
 ## Data Sources
@@ -71,7 +71,6 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 
 ## References
 
-- Original file: 2025-12-23 - THM CTF - Shadow Trace.pdf (archived)
 
 
 

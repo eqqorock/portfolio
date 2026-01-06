@@ -1,0 +1,63 @@
+# Alert Triage: Phishing Email Analysis (Multiple Samples)
+**Date:** 2026-01-06
+
+## Scenario
+This report is based on a controlled lab exercise analyzing multiple real-world phishing email samples. The objective was to identify common and advanced phishing techniques across different lures, brands, and delivery methods, and to assess user risk if interaction occurred.
+
+## Data Sources
+- Raw email headers
+- Email body (HTML and plain text)
+- Embedded hyperlinks and shortened URLs
+- Email attachments (PDF, Word template, Excel)
+- Open-source analysis references
+
+## Investigation Steps
+1. Reviewed sender and recipient fields for spoofing and mismatches
+2. Assessed subject lines for urgency and social engineering cues
+3. Analyzed HTML body structure and brand impersonation
+4. Inspected hyperlinks (including shortened URLs) and defanged destinations
+5. Identified tracking pixels and blocked external images
+6. Examined attachments and observed execution behavior
+7. Correlated indicators across samples to identify common phishing patterns
+
+## Evidence
+- Spoofed sender domains impersonating PayPal, Home Depot, Netflix, Apple, Citrix and DHL
+- URL shortening services obscuring final destinations
+- Tracking pixels embedded as small image files
+- Credential-harvesting pages impersonating OneDrive, Adobe, and Citrix
+- Attachments including PDFs, Word templates (.DOT), and Excel files
+- Excel attachment attempting to execute `regasms.exe`
+- Recipients BCCed to hide mass distribution
+
+## Analysis
+Across all samples, the emails demonstrated classic and advanced phishing techniques designed to induce urgency, trust, and rapid user action. Brand impersonation was reinforced through HTML formatting, logos, and familiar workflows such as invoices, shipping notices, and document delivery.
+
+Several samples attempted credential harvesting by redirecting victims through multiple impersonated login portals. Others relied on malicious attachments to deliver payloads or prompt further interaction. Poor grammar, unusual sender domains, and mismatched email fields were consistent indicators of malicious intent.
+
+These behaviors align with real-world phishing campaigns and present a credible risk of credential compromise or malware execution if a user interacts with the content.
+
+## MITRE ATT&CK
+- **Tactic:** Initial Access
+- **Technique:** Phishing (T1566)
+- **Sub-techniques:**
+  - Phishing via Email (T1566.001)
+  - Spearphishing Attachment (T1566.001)
+  - Spearphishing Link (T1566.002)
+
+## Decision
+- **Classification:** True Positive  
+- **Severity:** Medium  
+- **Justification:** Multiple high-confidence phishing indicators were present across samples, including spoofing, credential harvesting, and malicious attachment behavior.
+
+## Response / Escalation
+- Block sender domains, URLs, and attachment hashes
+- Update email security filters and detection rules
+- Educate users on phishing indicators and reporting procedures
+- Monitor for related credential abuse or malware activity
+
+## Lessons Learned
+- Phishing campaigns often reuse the same techniques across different brands
+- Attachment-based phishing remains effective despite user awareness training
+
+---
+*Source: Hands-on security lab (phishing email analysis simulation)*
