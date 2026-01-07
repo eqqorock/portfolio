@@ -2,16 +2,6 @@
 
 **Date:** 2025-12-15
 
-## Investigation Summary
-
-Short summary: This TryHackMe CTF challenge investigated suspicious persistence and lateral movement techniques simulated in the exercise.
-
-## Detection / Alert
-
-- Alert name: Suspicious persistence observed
-# persistence-mechanism-detected
-
-**Date:** 2025-12-15
 
 ## Investigation Summary
 
