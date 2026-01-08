@@ -294,6 +294,13 @@
 
             await walk(path);
 
+            // Only include files from explicit SOC report categories to avoid listing README or misc files
+            const allowedCategories = ['credential-access','email-security','endpoint','vulnerability-management','network'];
+            results = results.filter(r => {
+                const parts = r.path.split('/');
+                return parts.length >= 3 && allowedCategories.includes(parts[1]);
+            });
+
             // Enrich each file: read content, extract first H1 and the static Date line directly under it
             const enriched = [];
             for(const r of results){
