@@ -354,12 +354,33 @@
         async function loadSocIndex(){
             const listEl = document.getElementById('soc-reports-list');
             if(!listEl) return;
+            const showComingSoon = () => { listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; };
             listEl.innerHTML = '<li style="color:var(--muted)">Loading SOC reports…</li>';
+
+            // Try Pages-served index with retries (handle Pages build latency)
             try{
-                const res = await fetch('soc-reports/index.json');
-                if(!res.ok) { listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; return; }
+                let res = null;
+                const tryFetch = async () => {
+                    try{
+                        return await fetch('soc-reports/index.json', {cache: 'no-store'});
+                    }catch(e){ return null; }
+                };
+
+                // immediate attempt + up to 3 retries with backoff
+                res = await tryFetch();
+                let attempt = 0;
+                while((!res || !res.ok) && attempt < 3){
+                    attempt++;
+                    await new Promise(r => setTimeout(r, 1000 * attempt));
+                    res = await tryFetch();
+                }
+
+                if(!res || !res.ok){ showComingSoon(); return; }
+
                 const items = await res.json();
-                if(!Array.isArray(items) || items.length===0){ listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; return; }
+                if(!Array.isArray(items) || items.length === 0){ showComingSoon(); return; }
+
+                // populate list (reverse-chronological order assumed in index)
                 listEl.innerHTML = '';
                 items.forEach(it => {
                     const li = document.createElement('li');
@@ -368,7 +389,7 @@
                     a.textContent = `${it.date} — ${it.category} / ${it.title}`;
                     li.appendChild(a); listEl.appendChild(li);
                 });
-            }catch(e){ console.error('loadSocIndex error', e); listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; }
+            }catch(e){ console.error('loadSocIndex error', e); showComingSoon(); }
         }
         window.addEventListener('load', ()=>{ loadSocIndex(); });
         // restore contact on resize (desktop/tablet)
