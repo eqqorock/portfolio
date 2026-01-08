@@ -271,120 +271,84 @@
             return null;
         }
 
-        // Recursively list all markdown files under `path`, enrich with latest commit date and first H1
+        // Robust listing using git/trees + commit-date fallback when `**Date:**` missing
         async function listRepoWriteups(path, listElementId){
             const apiBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
-            const results = [];
-
-            async function walk(p){
-                try{
-                    const res = await fetch(`${apiBase}/contents/${encodeURIComponent(p)}?ref=${GITHUB_BRANCH}`);
-                    if(!res.ok) return;
-                    const items = await res.json();
-                    for(const it of items){
-                        if(it.type === 'file' && /\.md$/i.test(it.name)){
-                            if(it.name.toLowerCase() === 'readme.md') continue;
-                            results.push({name: it.name, path: `${p}/${it.name}`, url: it.html_url});
-                        } else if(it.type === 'dir'){
-                            await walk(`${p}/${it.name}`);
-                        }
-                    }
-                }catch(e){ console.error('walk error', e); }
-            }
-
-            await walk(path);
-
-            // Only include files from explicit SOC report categories to avoid listing README or misc files
-            const allowedCategories = ['credential-access','email-security','endpoint','vulnerability-management','network'];
-            results = results.filter(r => {
-                const parts = r.path.split('/');
-                return parts.length >= 3 && allowedCategories.includes(parts[1]);
-            });
-
-            // Enrich each file: read content, extract first H1 and the static Date line directly under it
-            const enriched = [];
-            for(const r of results){
-                try{
-                    const contentRes = await fetch(`${apiBase}/contents/${encodeURIComponent(r.path)}?ref=${GITHUB_BRANCH}`);
-                    if(!contentRes.ok){ console.warn('Could not fetch', r.path); continue; }
-                    const contentJson = await contentRes.json();
-                    const b64 = (contentJson.content || '').replace(/\s/g,'');
-                    let text = '';
-                    try{ text = atob(b64); } catch(e){ try{ text = decodeURIComponent(escape(atob(b64))); }catch(e2){ text = ''; } }
-                    if(!text) { console.warn('Empty text for', r.path); continue; }
-
-                    // split into lines to locate H1 and directly-following Date line, ignoring fenced code blocks
-                    const lines = text.split(/\r?\n/);
-                    let title = r.name.replace(/\.md$/i,'');
-                    let dateStr = null;
-                    let inCode = false;
-                    for(let i=0;i<lines.length;i++){
-                        const line = lines[i];
-                        // toggle fenced code block state when encountering ```
-                        if(line.trim().startsWith('```')){ inCode = !inCode; continue; }
-                        if(inCode) continue;
-                        const h1m = line.match(/^#\s+(.+)$/);
-                        if(h1m){
-                            title = h1m[1].trim();
-                            // look at next non-empty, non-code fence line for Date
-                            let j = i+1;
-                            while(j < lines.length){
-                                const nxt = lines[j].trim();
-                                if(nxt === '') { j++; continue; }
-                                if(nxt.startsWith('```')){ break; }
-                                const dm = nxt.match(/^\*\*Date:\*\*\s*(\d{4}-\d{2}-\d{2})\s*$/);
-                                if(dm) dateStr = dm[1];
-                                break;
-                            }
-                            break;
-                        }
-                    }
-                    if(!dateStr){ console.warn('Missing Date field for', r.path); continue; }
-                    const date = new Date(dateStr + 'T00:00:00Z');
-                    const parts = r.path.split('/');
-                    const categoryRaw = parts.length >= 3 ? parts[1] : 'uncategorized';
-                    const category = categoryRaw.replace(/[-_]/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
-                    enriched.push({path: r.path, url: r.url, date, category, title});
-                }catch(e){ console.error('enrich error', e); continue; }
-            }
-
-            // sort by static date (most recent first)
-            enriched.sort((a,b)=> b.date - a.date);
-
             const listEl = document.getElementById(listElementId);
             if(!listEl) return;
-            if(enriched.length===0){
-                // Fallback: show known writeups when API fails or returns none
-                const fallback = [
-                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/email-security/phishing-emails-analysis.md`, text: '2026-01-06 — Email Security / Phishing Email Analysis (Multiple Samples)'},
-                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/email-security/phishing-analysis-fundamentals.md`, text: '2026-01-03 — Email Security / Alert Triage: Phishing Email Analysis'},
-                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/credential-access/weak-credential-detection.md`, text: '2025-12-25 — Credential Access / weak-credential-detection'},
-                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/endpoint/persistence-mechanism-detected.md`, text: '2025-12-15 — Endpoint / persistence-mechanism-detected'},
-                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/vulnerability-management/vulnerability-management-assessment.md`, text: '2026-01-08 — Vulnerability Management / Vulnerability Management Assessment'}
-                ];
-                listEl.innerHTML = '';
-                fallback.forEach(item => {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.href = item.url; a.target = '_blank'; a.rel = 'noopener'; a.style.color = 'var(--muted)';
-                    a.textContent = item.text;
-                    li.appendChild(a);
-                    listEl.appendChild(li);
-                });
-                return;
-            }
-            listEl.innerHTML = '';
+            listEl.innerHTML = '<li style="color:var(--muted)">Loading SOC reports…</li>';
 
-            enriched.forEach(item=>{
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.href = item.url; a.target = '_blank'; a.rel = 'noopener';
-                const dateText = item.date.toISOString().slice(0,10);
-                a.textContent = `${dateText} — ${item.category} / ${item.title}`;
-                a.style.color = 'var(--muted)';
-                li.appendChild(a);
-                listEl.appendChild(li);
-            });
+            try{
+                // Get full tree once (faster and fewer requests)
+                const treeRes = await fetch(`${apiBase}/git/trees/${GITHUB_BRANCH}?recursive=1`);
+                if(!treeRes.ok) throw new Error('Could not fetch repo tree');
+                const treeJson = await treeRes.json();
+                const blobs = (treeJson.tree || []).filter(t => t.type === 'blob' && /\.md$/i.test(t.path) && /^soc-reports\//.test(t.path) && !/\/readme\.md$/i.test(t.path));
+
+                // Allowed categories (SOC style)
+                const allowedCategories = ['credential-access','email-security','endpoint','vulnerability-management','network'];
+                const candidates = blobs.filter(b => {
+                    const parts = b.path.split('/');
+                    return parts.length >= 3 && allowedCategories.includes(parts[1]);
+                });
+
+                const enriched = [];
+                for(const c of candidates){
+                    const rpath = c.path;
+                    const url = `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/${rpath}`;
+                    // fetch content to look for H1 and Date
+                    try{
+                        const contentRes = await fetch(`${apiBase}/contents/${encodeURIComponent(rpath)}?ref=${GITHUB_BRANCH}`);
+                        if(!contentRes.ok) throw new Error('no content');
+                        const contentJson = await contentRes.json();
+                        const b64 = (contentJson.content || '').replace(/\s/g,'');
+                        let text = '';
+                        try{ text = atob(b64); }catch(e){ try{ text = decodeURIComponent(escape(atob(b64))); }catch(e2){ text=''; } }
+
+                        let title = rpath.split('/').pop().replace(/\.md$/i,'');
+                        let dateStr = null;
+                        const lines = text.split(/\r?\n/);
+                        let inCode = false;
+                        for(let i=0;i<lines.length;i++){
+                            const line = lines[i];
+                            if(line.trim().startsWith('```')){ inCode = !inCode; continue; }
+                            if(inCode) continue;
+                            const h1 = line.match(/^#\s+(.+)$/);
+                            if(h1){ title = h1[1].trim();
+                                // look for Date on immediate next non-empty line
+                                let j=i+1; while(j<lines.length){ const nxt=lines[j].trim(); if(nxt===''){ j++; continue } if(nxt.startsWith('```')) break; const dm = nxt.match(/^\*\*Date:\*\*\s*(\d{4}-\d{2}-\d{2})\s*$/); if(dm) dateStr = dm[1]; break }
+                                break;
+                            }
+                        }
+
+                        // If no Date found, fallback to latest commit date for that path
+                        let dateObj = null;
+                        if(dateStr){ dateObj = new Date(dateStr + 'T00:00:00Z'); }
+                        else{
+                            try{
+                                const commitRes = await fetch(`${apiBase}/commits?path=${encodeURIComponent(rpath)}&sha=${GITHUB_BRANCH}&per_page=1`);
+                                if(commitRes.ok){ const commits = await commitRes.json(); if(Array.isArray(commits) && commits.length>0){ dateObj = new Date(commits[0].commit.author.date); } }
+                            }catch(e){ /* ignore commit fallback errors */ }
+                        }
+                        if(!dateObj) { console.warn('No date for', rpath); continue; }
+                        const parts = rpath.split('/');
+                        const category = parts[1].replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+                        enriched.push({path:rpath,url,title,date:dateObj,category});
+                    }catch(e){ console.warn('error reading', rpath, e); continue; }
+                }
+
+                if(enriched.length===0){ listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; return; }
+                enriched.sort((a,b)=> b.date - a.date);
+                listEl.innerHTML = '';
+                enriched.forEach(item=>{
+                    const li=document.createElement('li');
+                    const a=document.createElement('a');
+                    a.href = item.url; a.target = '_blank'; a.rel='noopener'; a.style.color='var(--muted)';
+                    a.textContent = `${item.date.toISOString().slice(0,10)} — ${item.category} / ${item.title}`;
+                    li.appendChild(a); listEl.appendChild(li);
+                });
+
+            }catch(e){ console.error('listRepoWriteups error', e); listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; }
         }
         // populate SOC report writeups from the repository branch containing the latest changes
         window.addEventListener('load', ()=>{ listRepoWriteups('soc-reports','soc-reports-list'); });
