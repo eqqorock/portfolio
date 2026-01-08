@@ -353,7 +353,26 @@
 
             const listEl = document.getElementById(listElementId);
             if(!listEl) return;
-            if(enriched.length===0){ listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; return; }
+            if(enriched.length===0){
+                // Fallback: show known writeups when API fails or returns none
+                const fallback = [
+                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/email-security/phishing-emails-analysis.md`, text: '2026-01-06 — Email Security / Phishing Email Analysis (Multiple Samples)'},
+                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/email-security/phishing-analysis-fundamentals.md`, text: '2026-01-03 — Email Security / Alert Triage: Phishing Email Analysis'},
+                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/credential-access/weak-credential-detection.md`, text: '2025-12-25 — Credential Access / weak-credential-detection'},
+                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/endpoint/persistence-mechanism-detected.md`, text: '2025-12-15 — Endpoint / persistence-mechanism-detected'},
+                    {url: `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/soc-reports/vulnerability-management/vulnerability-management-assessment.md`, text: '2026-01-08 — Vulnerability Management / Vulnerability Management Assessment'}
+                ];
+                listEl.innerHTML = '';
+                fallback.forEach(item => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = item.url; a.target = '_blank'; a.rel = 'noopener'; a.style.color = 'var(--muted)';
+                    a.textContent = item.text;
+                    li.appendChild(a);
+                    listEl.appendChild(li);
+                });
+                return;
+            }
             listEl.innerHTML = '';
 
             enriched.forEach(item=>{
