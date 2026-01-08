@@ -1,0 +1,31 @@
+name: Generate SOC reports index
+
+on:
+  push:
+    paths:
+      - 'soc-reports/**'
+    paths-ignore:
+      - 'soc-reports/_index.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Generate SOC index
+        run: node ./scripts/generate_soc_index.js
+      - name: Commit index.json if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add soc-reports/_index.json || true
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update SOC index" || true
+            git push
+          else
+            echo "No changes to commit"
+          fi
