@@ -1,5 +1,12 @@
 [
   {
+    "path": "soc-reports/email-security/alert-triage-powershell-dns-exfiltration.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/email-security/alert-triage-powershell-dns-exfiltration.md",
+    "title": "Alert Triage: PowerShell-Driven Phishing Compromise with DNS Exfiltration",
+    "date": "2026-01-12",
+    "category": "Email Security"
+  },
+  {
     "path": "soc-reports/vulnerability-management/vulnerability-management-assessment.md",
     "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/vulnerability-management/vulnerability-management-assessment.md",
     "title": "Vulnerability Management Assessment",
