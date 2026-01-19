@@ -1,0 +1,38 @@
+name: Regenerate SOC Index
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'soc-reports/**'
+      - 'scripts/generate_soc_index.js'
+
+jobs:
+  regenerate:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Run SOC index generator
+        run: node scripts/generate_soc_index.js
+
+      - name: Commit and push updated index if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add soc-reports/_index.json
+          if git diff --cached --quiet; then
+            echo "No changes to soc index"
+          else
+            git commit -m "chore(soc): regenerate index [skip ci]"
+            git push
+          fi

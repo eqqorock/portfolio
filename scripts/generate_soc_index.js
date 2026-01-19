@@ -8,6 +8,10 @@ const OUT = path.join(SRC, '_index.json');
 
 const allowedCategories = new Set(['credential-access','email-security','endpoint','vulnerability-management','network']);
 
+function titleCaseCategory(cat){
+  return cat.split('-').map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(' ');
+}
+
 function walk(dir){
   const res = [];
   for(const name of fs.readdirSync(dir)){
@@ -56,7 +60,8 @@ function parseFile(fpath){
     if(cd) date = cd.slice(0,10);
   }
   if(!date) return null;
-  return { path: rel, url: `https://github.com/${process.env.GITHUB_REPOSITORY || 'eqqorock/portfolio'}/blob/main/${rel}`, title, date, category };
+  const outCategory = titleCaseCategory(category);
+  return { path: rel, url: `https://github.com/${process.env.GITHUB_REPOSITORY || 'eqqorock/portfolio'}/blob/main/${rel}`, title, date, category: outCategory };
 }
 
 function main(){
