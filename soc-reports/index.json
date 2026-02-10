@@ -1,5 +1,12 @@
 [
   {
+    "path": "soc-reports/network/wireshark-packet-analysis-review.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/network/wireshark-packet-analysis-review.md",
+    "title": "SOC Report: Wireshark Packet Analysis Review",
+    "date": "2026-01-19",
+    "category": "Network"
+  },
+  {
     "path": "soc-reports/email-security/alert-triage-powershell-dns-exfiltration.md",
     "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/email-security/alert-triage-powershell-dns-exfiltration.md",
     "title": "Alert Triage: PowerShell-Driven Phishing Compromise with DNS Exfiltration",
@@ -12,6 +19,13 @@
     "title": "Vulnerability Management Assessment",
     "date": "2026-01-08",
     "category": "Vulnerability Management"
+  },
+  {
+    "path": "soc-reports/endpoint/persistence-mechanism-detected.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/endpoint/persistence-mechanism-detected.md",
+    "title": "persistence-mechanism-detected",
+    "date": "2026-01-07",
+    "category": "Endpoint"
   },
   {
     "path": "soc-reports/email-security/phishing-emails-analysis.md",
@@ -33,12 +47,5 @@
     "title": "weak-credential-detection",
     "date": "2025-12-25",
     "category": "Credential Access"
-  },
-  {
-    "path": "soc-reports/endpoint/persistence-mechanism-detected.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/endpoint/persistence-mechanism-detected.md",
-    "title": "persistence-mechanism-detected",
-    "date": "2025-12-15",
-    "category": "Endpoint"
   }
 ]
