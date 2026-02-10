@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Erol — Cybersecurity Portfolio</title>
+    <meta name="description" content="Professional cybersecurity portfolio showcasing labs, CTFs, tools and contact info.">
+    <style>
+        :root{
+            --bg:#0b0f14; --card:#0f1720; --muted:#94a3b8; --accent:#00bcd4; --glass:rgba(255,255,255,0.04);
+            --max-width:1100px; --radius:12px; --transition:200ms;
+        }
+        *{box-sizing:border-box}
+        body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial; background:linear-gradient(180deg,#061019 0%, #07121a 60%); color:#e6eef6; -webkit-font-smoothing:antialiased;}
+        .wrap{max-width:var(--max-width);margin:40px auto;padding:28px}
+        header{display:flex;align-items:center;justify-content:space-between;gap:16px}
+        .brand{display:flex;align-items:center;gap:14px}
+        .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#7c3aed);display:flex;align-items:center;justify-content:center;font-weight:700;color:#021022}
+        .brand h1{font-size:1.05rem;margin:0}
+        nav.primary{display:flex;gap:14px}
+        nav.primary a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px;transition:background var(--transition),color var(--transition)}
+        nav.primary a.active, nav.primary a:hover{background:var(--glass);color:var(--accent)}
+
+        .hero{display:flex;gap:28px;align-items:center;margin-top:24px}
+        .hero .intro{flex:1}
+        .hero h2{margin:0;font-size:2rem;letter-spacing:-0.6px}
+        .hero p{color:var(--muted);margin-top:10px;line-height:1.4}
+        .cta{margin-top:18px}
+        .btn{display:inline-block;background:linear-gradient(90deg,var(--accent),#7c3aed);color:#021022;padding:10px 14px;border-radius:10px;font-weight:600;text-decoration:none}
+
+        main{display:grid;grid-template-columns:1fr 340px;gap:26px;margin-top:28px}
+        .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:18px;border-radius:var(--radius);box-shadow:0 6px 30px rgba(2,6,23,0.6)}
+        .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+        .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+        .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+        .card h3{margin:0 0 8px 0}
+        .card p{margin:0;color:var(--muted);font-size:0.95rem}
+        .card a.action{display:inline-block;margin-top:10px;color:var(--accent);text-decoration:none;font-weight:600}
+        /* Quick links in hero/quick panel should match muted link color */
+        a.quick-link{color:var(--muted);text-decoration:none;font-weight:600}
+        a.quick-link:hover{color:var(--accent)}
+
+        aside .panel h4{margin:0 0 10px 0}
+        .list a{color:var(--muted);text-decoration:none;display:block;padding:8px;border-radius:8px}
+        .list a:hover{background:var(--glass);color:var(--accent)}
+
+        footer{margin-top:30px;color:var(--muted);font-size:0.9rem;text-align:center}
+
+        /* Contact form */
+        .contact-form label{display:block;font-size:0.9rem;margin-bottom:6px;color:var(--muted)}
+        .contact-form input,.contact-form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+        .contact-form button{margin-top:10px;width:100%;padding:10px;border-radius:10px;border:0;background:var(--accent);color:#021022;font-weight:700}
+
+        @media (max-width:900px){main{grid-template-columns:1fr} .hero{flex-direction:column;align-items:flex-start} nav.primary{display:none}}
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <div class="brand">
+                <div class="logo">ER</div>
+                <div>
+                    <h1>Erol — Cybersecurity Portfolio</h1>
+                    <div style="color:var(--muted);font-size:0.9rem">Labs • CTFs • Tools • Writeups</div>
+                </div>
+            </div>
+            <nav class="primary" aria-label="Primary Navigation">
+                <a href="#" data-target="portfolio" class="active">Portfolio</a>
+                <a href="#" data-target="resources">Resources</a>
+                <a href="#" data-target="about">About</a>
+                <a href="#" data-target="contact">Contact</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <div class="intro">
+                <h2>Practical cybersecurity work, CTF writeups, and tools crafted for real-world learning.</h2>
+                <p>Welcome — this portfolio collects TryHackMe modules, small web tools, investigations, and curated learning resources. Browse the sections to explore labs, play demos, or get in touch.</p>
+                <div class="cta"><a class="btn" href="#" data-target="contact">Contact me</a></div>
+            </div>
+            <div style="width:320px">
+                <div id="quick-links-panel" class="panel" style="padding:20px;text-align:center">
+                    <h4 style="margin-top:0">Quick Links</h4>
+                    <div style="display:flex;gap:8px;flex-direction:column">
+                        <a class="quick-link" href="#" data-target="cybersecurity">Cybersecurity</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <main>
+            <div>
+                <article id="portfolio" class="panel">
+                    <div class="section-title"><h2 style="margin:0">Portfolio</h2></div>
+                    <div id="cybersecurity" style="margin-bottom:12px">
+                        <h3>SOC Reports (derived from hands-on labs and simulations)</h3>
+                            <p style="color:var(--muted)">SOC-style alert triage writeups derived from hands-on labs, CTFs, and simulations.</p>
+                            <ul id="soc-reports-list" style="margin-top:12px;color:var(--muted)">
+                                <li style="color:var(--muted)">Loading SOC reports…</li>
+                            </ul>
+                    </div>
+
+                    <!-- Games section removed -->
+
+                    <!-- Miscellaneous section removed -->
+                </article>
+
+                <article id="resources" class="panel" style="margin-top:18px;display:none">
+                    <div class="section-title"><h2 style="margin:0">Resources</h2></div>
+                    <div style="display:flex;gap:12px;flex-direction:column">
+                        <div><strong>Investigation</strong><div class="list"><a href="https://attack.mitre.org/" target="_blank" rel="noopener">ATT&CK — MITRE</a></div></div>
+                        <div style="margin-top:8px"><strong>Learning</strong><div class="list"><a href="https://www.netacad.com/" target="_blank" rel="noopener">NetAcad</a></div></div>
+                        <div style="margin-top:8px"><strong>Practice</strong><div class="list"><a href="https://tryhackme.com/" target="_blank" rel="noopener">TryHackMe</a><a href="https://www.vulnhub.com/" target="_blank" rel="noopener">VulnHub</a></div></div>
+                    </div>
+                </article>
+
+                <article id="about" class="panel" style="margin-top:18px;display:none">
+                  <h2>About Me</h2>
+                  <p style="color:var(--muted)">Welcome to Erol's portfolio website! Here you can learn more about me, see my work, find useful resources, and get in touch.</p>
+                </article>
+
+                <article id="contact" class="panel" style="margin-top:18px;display:none">
+                  <h2>Contact Erol</h2>
+                  <form id="contactForm" class="contact-form" autocomplete="off">
+                    <label for="name">Name</label>
+                    <input id="name" name="name" required>
+                    <label for="email">Your Email</label>
+                    <input id="email" name="email" type="email" required>
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                    <button type="submit">Send Message</button>
+                  </form>
+                  <div id="thankYouMsg" style="display:none;color:var(--accent);margin-top:12px">Thank you — I'll respond shortly.</div>
+                </article>
+            </div>
+
+            <aside>
+                <div class="panel" style="margin-top:14px">
+                    <h4 style="margin-top:0">Other</h4>
+                    <div class="list">
+                        <a href="#" data-target="portfolio">Portfolio</a>
+                        <a href="#" data-target="resources">Resources</a>
+                        <a href="#" data-target="about">About</a>
+                        <a href="#" data-target="contact">Contact</a>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <footer>
+            Crafted for reliability and clarity.
+        </footer>
+    </div>
+
+        <script>
+        // Cache contact and hero/quick panel for mobile reflow
+        const _contactEl = document.getElementById('contact');
+        const _heroEl = document.querySelector('.hero');
+        const _quickPanel = document.getElementById('quick-links-panel');
+        const _contactOriginalParent = _contactEl ? _contactEl.parentElement : null;
+        const _contactOriginalNext = _contactEl ? _contactEl.nextElementSibling : null;
+        const _quickPanelOriginalDisplay = _quickPanel ? (_quickPanel.style.display || '') : '';
+
+        function placeContactForMobile(){
+            if(!(_contactEl && _heroEl && _quickPanel)) return;
+            if(window.innerWidth <= 900){
+                // move contact into hero above quick panel so user sees it immediately
+                if(_contactEl.parentElement !== _heroEl){
+                    _heroEl.insertBefore(_contactEl, _quickPanel);
+                }
+                // hide the quick links panel so it doesn't 'hog' the viewport on mobile
+                _quickPanel.style.display = 'none';
+                setTimeout(()=>{ _contactEl.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+            } else {
+                restoreContact();
+            }
+        }
+
+        function restoreContact(){
+            if(!(_contactEl && _contactOriginalParent)) return;
+            // restore contact DOM position
+            if(_contactEl.parentElement !== _contactOriginalParent){
+                if(_contactOriginalNext) _contactOriginalParent.insertBefore(_contactEl, _contactOriginalNext);
+                else _contactOriginalParent.appendChild(_contactEl);
+            }
+            // restore quick panel visibility
+            if(_quickPanel) _quickPanel.style.display = _quickPanelOriginalDisplay || '';
+        }
+        // Navigation and section handling
+        function showTarget(id){
+            const sections=['portfolio','resources','about','contact'];
+            sections.forEach(s=>{
+                const el=document.getElementById(s);
+                if(!el) return;
+                if(s===id){ el.style.display='block'; }
+                else { el.style.display = 'none'; }
+            });
+            // contact is in aside panel with id 'contact'
+            const contactPanel = document.getElementById('contact');
+            if(id==='contact' && contactPanel) contactPanel.style.display='block';
+            if(id!=='contact' && contactPanel) contactPanel.style.display='none';
+            // highlight top nav
+            document.querySelectorAll('nav.primary a').forEach(a=>{
+                a.classList.toggle('active', a.dataset.target===id);
+            });
+        }
+        document.querySelectorAll('[data-target]').forEach(el=>{
+            el.addEventListener('click',function(e){
+                e.preventDefault();
+                const t = this.dataset.target;
+                // Map subsection targets to top-level sections + scroll
+                const subMap = {
+                    'cybersecurity': {section:'portfolio', sub:'cybersecurity'},
+                    // 'miscellaneous' removed
+                    'investigation': {section:'resources', sub:'investigation'},
+                    'learning': {section:'resources', sub:'learning'},
+                    'practice': {section:'resources', sub:'practice'}
+                };
+                if(subMap[t]){
+                    showTarget(subMap[t].section);
+                    setTimeout(()=>{ const el2=document.getElementById(subMap[t].sub); if(el2) el2.scrollIntoView({behavior:'smooth', block:'start'}); }, 60);
+                } else if(t) {
+                    showTarget(t);
+                }
+
+                // Special handling for mobile contact: move contact above quick links so user sees it
+                if(t === 'contact'){
+                  placeContactForMobile();
+                } else {
+                  // restore original contact placement if user navigates elsewhere
+                  restoreContact();
+                }
+            });
+        });
+        // default
+        showTarget('portfolio');
+
+        // Contact form handler — use same relay service (Formspree) preserved from original
+        document.getElementById('contactForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            const form = e.target;
+            const thankYou = document.getElementById('thankYouMsg');
+            fetch('https://formspree.io/f/mwprklzn', {
+                method: 'POST', headers: {'Accept':'application/json'}, body: new FormData(form)
+            }).then(r=>{
+                if(r.ok){ form.style.display='none'; thankYou.style.display='block'; }
+                else { alert('Error sending message — please try again later.'); }
+            }).catch(()=>{ alert('Error sending message — please try again later.'); });
+        });
+
+        // GitHub repo listing (preserve original dynamic behavior)
+        const GITHUB_OWNER = 'eqqorock';
+        const GITHUB_REPO = 'portfolio';
+        const GITHUB_BRANCH = 'main';
+
+        function parseDateFromName(name){
+            // Normalize whitespace
+            name = String(name || '').trim();
+            // YYYY-MM-DD, YYYY_MM_DD, YYYY.MM.DD or contiguous YYYYMMDD
+            let m = name.match(/(20\d{2})[.\-_]?(0?[1-9]|1[0-2])[.\-_]?(0?[1-9]|[12]\d|3[01])/);
+            if(m) return new Date(`${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`);
+            // MM-DD-YYYY, MM_DD_YYYY, MM/DD/YYYY (common US-style filenames)
+            m = name.match(/(0?[1-9]|1[0-2])[.\-\/_]?(0?[1-9]|[12]\d|3[01])[.\-\/_]?(20\d{2})/);
+            if(m) return new Date(`${m[3]}-${m[1].padStart(2,'0')}-${m[2].padStart(2,'0')}`);
+            // Contiguous 8-digit YYYYMMDD
+            m = name.match(/\b(20\d{6})\b/);
+            if(m){ const s = m[1]; return new Date(`${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`); }
+            // Fallback: look for any 4-digit year and two nearby 1-2 digit month/day
+            m = name.match(/(20\d{2}).{0,3}(0?[1-9]|1[0-2]).{0,3}(0?[1-9]|[12]\d|3[01])/);
+            if(m) return new Date(`${m[1]}-${m[2].padStart(2,'0')}-${m[3].padStart(2,'0')}`);
+            return null;
+        }
+
+        // Robust listing using git/trees + commit-date fallback when `**Date:**` missing
+        async function listRepoWriteups(path, listElementId){
+            const apiBase = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}`;
+            const listEl = document.getElementById(listElementId);
+            if(!listEl) return;
+            listEl.innerHTML = '<li style="color:var(--muted)">Loading SOC reports…</li>';
+
+            try{
+                // Get full tree once (faster and fewer requests)
+                const treeRes = await fetch(`${apiBase}/git/trees/${GITHUB_BRANCH}?recursive=1`);
+                if(!treeRes.ok) throw new Error('Could not fetch repo tree');
+                const treeJson = await treeRes.json();
+                const blobs = (treeJson.tree || []).filter(t => t.type === 'blob' && /\.md$/i.test(t.path) && /^soc-reports\//.test(t.path) && !/\/readme\.md$/i.test(t.path));
+
+                // Allowed categories (SOC style)
+                const allowedCategories = ['credential-access','email-security','endpoint','vulnerability-management','network'];
+                const candidates = blobs.filter(b => {
+                    const parts = b.path.split('/');
+                    return parts.length >= 3 && allowedCategories.includes(parts[1]);
+                });
+
+                const enriched = [];
+                for(const c of candidates){
+                    const rpath = c.path;
+                    const url = `https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/blob/${GITHUB_BRANCH}/${rpath}`;
+                    // fetch content to look for H1 and Date
+                    try{
+                        const contentRes = await fetch(`${apiBase}/contents/${encodeURIComponent(rpath)}?ref=${GITHUB_BRANCH}`);
+                        if(!contentRes.ok) throw new Error('no content');
+                        const contentJson = await contentRes.json();
+                        const b64 = (contentJson.content || '').replace(/\s/g,'');
+                        let text = '';
+                        try{ text = atob(b64); }catch(e){ try{ text = decodeURIComponent(escape(atob(b64))); }catch(e2){ text=''; } }
+
+                        let title = rpath.split('/').pop().replace(/\.md$/i,'');
+                        let dateStr = null;
+                        const lines = text.split(/\r?\n/);
+                        let inCode = false;
+                        for(let i=0;i<lines.length;i++){
+                            const line = lines[i];
+                            if(line.trim().startsWith('```')){ inCode = !inCode; continue; }
+                            if(inCode) continue;
+                            const h1 = line.match(/^#\s+(.+)$/);
+                            if(h1){ title = h1[1].trim();
+                                // look for Date on immediate next non-empty line
+                                let j=i+1; while(j<lines.length){ const nxt=lines[j].trim(); if(nxt===''){ j++; continue } if(nxt.startsWith('```')) break; const dm = nxt.match(/^\*\*Date:\*\*\s*(\d{4}-\d{2}-\d{2})\s*$/); if(dm) dateStr = dm[1]; break }
+                                break;
+                            }
+                        }
+
+                        // If no Date found, fallback to latest commit date for that path
+                        let dateObj = null;
+                        if(dateStr){ dateObj = new Date(dateStr + 'T00:00:00Z'); }
+                        else{
+                            try{
+                                const commitRes = await fetch(`${apiBase}/commits?path=${encodeURIComponent(rpath)}&sha=${GITHUB_BRANCH}&per_page=1`);
+                                if(commitRes.ok){ const commits = await commitRes.json(); if(Array.isArray(commits) && commits.length>0){ dateObj = new Date(commits[0].commit.author.date); } }
+                            }catch(e){ /* ignore commit fallback errors */ }
+                        }
+                        if(!dateObj) { console.warn('No date for', rpath); continue; }
+                        const parts = rpath.split('/');
+                        const category = parts[1].replace(/[-_]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+                        enriched.push({path:rpath,url,title,date:dateObj,category});
+                    }catch(e){ console.warn('error reading', rpath, e); continue; }
+                }
+
+                if(enriched.length===0){ listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; return; }
+                enriched.sort((a,b)=> b.date - a.date);
+                listEl.innerHTML = '';
+                enriched.forEach(item=>{
+                    const li=document.createElement('li');
+                    const a=document.createElement('a');
+                    a.href = item.url; a.target = '_blank'; a.rel='noopener'; a.style.color='var(--muted)';
+                    a.textContent = `${item.date.toISOString().slice(0,10)} — ${item.category} / ${item.title}`;
+                    li.appendChild(a); listEl.appendChild(li);
+                });
+
+            }catch(e){ console.error('listRepoWriteups error', e); listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; }
+        }
+        // populate SOC report writeups from a pre-generated JSON index (generated by GitHub Actions)
+        async function loadSocIndex(){
+            const listEl = document.getElementById('soc-reports-list');
+            if(!listEl) return;
+            const showComingSoon = () => { listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; };
+            listEl.innerHTML = '<li style="color:var(--muted)">Loading SOC reports…</li>';
+
+            // Try Pages-served index with retries (handle Pages build latency)
+            try{
+                let res = null;
+                const tryFetch = async () => {
+                    try{
+                        return await fetch('soc-reports/index.json', {cache: 'no-store'});
+                    }catch(e){ return null; }
+                };
+
+                // immediate attempt + up to 3 retries with backoff
+                res = await tryFetch();
+                let attempt = 0;
+                while((!res || !res.ok) && attempt < 3){
+                    attempt++;
+                    await new Promise(r => setTimeout(r, 1000 * attempt));
+                    res = await tryFetch();
+                }
+
+                if(!res || !res.ok){ showComingSoon(); return; }
+
+                const items = await res.json();
+                if(!Array.isArray(items) || items.length === 0){ showComingSoon(); return; }
+
+                // populate list (reverse-chronological order assumed in index)
+                listEl.innerHTML = '';
+                items.forEach(it => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = it.url; a.target = '_blank'; a.rel = 'noopener'; a.style.color='var(--muted)';
+                    a.textContent = `${it.date} — ${it.category} / ${it.title}`;
+                    li.appendChild(a); listEl.appendChild(li);
+                });
+            }catch(e){ console.error('loadSocIndex error', e); showComingSoon(); }
+        }
+        window.addEventListener('load', ()=>{ loadSocIndex(); });
+        // restore contact on resize (desktop/tablet)
+        window.addEventListener('resize', ()=>{ if(window.innerWidth > 900) restoreContact(); });
+    </script>
+</body>
+</html>
+
