@@ -1,5 +1,12 @@
 [
   {
+    "path": "soc-reports/endpoint/persistence-mechanism-detected.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/endpoint/persistence-mechanism-detected.md",
+    "title": "persistence-mechanism-detected",
+    "date": "2026-02-10",
+    "category": "Endpoint"
+  },
+  {
     "path": "soc-reports/vulnerability-management/cloud-security-posture-scoutsuite/cloud-security-posture-scoutsuite.md",
     "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/vulnerability-management/cloud-security-posture-scoutsuite/cloud-security-posture-scoutsuite.md",
     "title": "Assessment: Cloud Security Posture Review (ScoutSuite)",
@@ -9,7 +16,7 @@
   {
     "path": "soc-reports/network/wireshark-packet-analysis-review.md",
     "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/network/wireshark-packet-analysis-review.md",
-    "title": "SOC Report: Wireshark Packet Analysis Review",
+    "title": "Investigation: Network Traffic Analysis Using Wireshark",
     "date": "2026-01-19",
     "category": "Network"
   },
@@ -26,13 +33,6 @@
     "title": "Assessment: Legacy System Identification and Vulnerability Management",
     "date": "2026-01-08",
     "category": "Vulnerability Management"
-  },
-  {
-    "path": "soc-reports/endpoint/persistence-mechanism-detected.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/endpoint/persistence-mechanism-detected.md",
-    "title": "persistence-mechanism-detected",
-    "date": "2026-01-07",
-    "category": "Endpoint"
   },
   {
     "path": "soc-reports/email-security/phishing-emails-analysis.md",
