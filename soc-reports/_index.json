@@ -1,12 +1,5 @@
 [
   {
-    "path": "soc-reports/endpoint/persistence-mechanism-detected.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/endpoint/persistence-mechanism-detected.md",
-    "title": "persistence-mechanism-detected",
-    "date": "2026-02-10",
-    "category": "Endpoint"
-  },
-  {
     "path": "soc-reports/vulnerability-management/cloud-security-posture-scoutsuite/cloud-security-posture-scoutsuite.md",
     "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/vulnerability-management/cloud-security-posture-scoutsuite/cloud-security-posture-scoutsuite.md",
     "title": "Assessment: Cloud Security Posture Review (ScoutSuite)",
@@ -54,5 +47,12 @@
     "title": "Alert Triage: Weak Credential Detection and Password Hash Cracking",
     "date": "2025-12-25",
     "category": "Credential Access"
+  },
+  {
+    "path": "soc-reports/endpoint/persistence-mechanism-detected.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/endpoint/persistence-mechanism-detected.md",
+    "title": "Alert Triage: Persistence Mechanism Detection on Windows Endpoint",
+    "date": "2025-12-15",
+    "category": "Endpoint"
   }
 ]
