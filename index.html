@@ -44,6 +44,15 @@
         .list a{color:var(--muted);text-decoration:none;display:block;padding:8px;border-radius:8px}
         .list a:hover{background:var(--glass);color:var(--accent)}
 
+        /* SOC Reports grouped layout */
+        .soc-category{margin-bottom:20px}
+        .soc-category h4{margin:0 0 8px 0;font-size:0.95rem;color:var(--accent);border-bottom:1px solid rgba(0,188,212,0.2);padding-bottom:4px}
+        .soc-category ul{margin:0;padding-left:0;list-style:none}
+        .soc-category li{margin-bottom:6px}
+        .soc-category a{color:var(--muted);text-decoration:none;display:block;padding:6px 10px;border-radius:6px;transition:all var(--transition);font-size:0.95rem}
+        .soc-category a:hover{background:var(--glass);color:var(--accent);padding-left:14px}
+        .soc-date{color:rgba(148,163,184,0.7);font-size:0.85rem;margin-right:8px}
+
         footer{margin-top:30px;color:var(--muted);font-size:0.9rem;text-align:center}
 
         /* Contact form */
@@ -95,9 +104,9 @@
                     <div id="cybersecurity" style="margin-bottom:12px">
                         <h3>SOC Reports (derived from hands-on labs and simulations)</h3>
                             <p style="color:var(--muted)">SOC-style alert triage writeups derived from hands-on labs, CTFs, and simulations.</p>
-                            <ul id="soc-reports-list" style="margin-top:12px;color:var(--muted)">
-                                <li style="color:var(--muted)">Loading SOC reports…</li>
-                            </ul>
+                            <div id="soc-reports-list" style="margin-top:16px">
+                                <p style="color:var(--muted)">Loading SOC reports…</p>
+                            </div>
                     </div>
 
                     <!-- Games section removed -->
@@ -354,8 +363,8 @@
         async function loadSocIndex(){
             const listEl = document.getElementById('soc-reports-list');
             if(!listEl) return;
-            const showComingSoon = () => { listEl.innerHTML = '<li style="color:var(--muted)">Coming soon!</li>'; };
-            listEl.innerHTML = '<li style="color:var(--muted)">Loading SOC reports…</li>';
+            const showComingSoon = () => { listEl.innerHTML = '<p style="color:var(--muted)">Coming soon!</p>'; };
+            listEl.innerHTML = '<p style="color:var(--muted)">Loading SOC reports…</p>';
 
             // Try Pages-served index with retries (handle Pages build latency)
             try{
@@ -380,14 +389,34 @@
                 const items = await res.json();
                 if(!Array.isArray(items) || items.length === 0){ showComingSoon(); return; }
 
-                // populate list (reverse-chronological order assumed in index)
-                listEl.innerHTML = '';
+                // Group by category
+                const grouped = {};
                 items.forEach(it => {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.href = it.url; a.target = '_blank'; a.rel = 'noopener'; a.style.color='var(--muted)';
-                    a.textContent = `${it.date} — ${it.category} / ${it.title}`;
-                    li.appendChild(a); listEl.appendChild(li);
+                    if(!grouped[it.category]) grouped[it.category] = [];
+                    grouped[it.category].push(it);
+                });
+
+                // Render grouped categories
+                listEl.innerHTML = '';
+                const categoryOrder = ['Email Security', 'Network', 'Endpoint', 'Vulnerability Management', 'Credential Access'];
+                categoryOrder.forEach(cat => {
+                    if(!grouped[cat]) return;
+                    const catDiv = document.createElement('div');
+                    catDiv.className = 'soc-category';
+                    const h4 = document.createElement('h4');
+                    h4.textContent = cat;
+                    catDiv.appendChild(h4);
+                    const ul = document.createElement('ul');
+                    grouped[cat].forEach(it => {
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = it.url; a.target = '_blank'; a.rel = 'noopener';
+                        a.innerHTML = `<span class="soc-date">${it.date}</span>${it.title}`;
+                        li.appendChild(a);
+                        ul.appendChild(li);
+                    });
+                    catDiv.appendChild(ul);
+                    listEl.appendChild(catDiv);
                 });
             }catch(e){ console.error('loadSocIndex error', e); showComingSoon(); }
         }
