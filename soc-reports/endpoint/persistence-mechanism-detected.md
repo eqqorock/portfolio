@@ -60,7 +60,3 @@ Short summary: This TryHackMe CTF challenge investigated suspicious persistence 
 - Tools used: system enumeration tools and log analysis.
 
 ## References
-
-
-
-
