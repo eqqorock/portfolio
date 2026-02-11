@@ -4,7 +4,7 @@ const { execSync } = require('child_process');
 
 const ROOT = process.cwd();
 const SRC = path.join(ROOT, 'soc-reports');
-const OUT = path.join(SRC, '_index.json');
+const OUT = path.join(SRC, 'index.json');
 
 function titleCaseCategory(cat){
   return cat.split('-').map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(' ');
@@ -92,11 +92,7 @@ function main(){
   
   items.sort((a,b)=> b.date.localeCompare(a.date));
   fs.writeFileSync(OUT, JSON.stringify(items, null, 2), 'utf8');
-  
-  // Also write public-facing index.json (without underscore) so Pages can serve it
-  const PUBLIC_OUT = path.join(SRC, 'index.json');
-  fs.writeFileSync(PUBLIC_OUT, JSON.stringify(items, null, 2), 'utf8');
-  console.log('Wrote', OUT, 'and', PUBLIC_OUT, items.length, 'items');
+  console.log('Wrote', OUT, items.length, 'items');
 }
 
 main();
