@@ -1,56 +1,56 @@
 [
   {
-    "path": "soc-reports/vulnerability-management/cloud-security-posture-scoutsuite/cloud-security-posture-scoutsuite.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/vulnerability-management/cloud-security-posture-scoutsuite/cloud-security-posture-scoutsuite.md",
+    "path": "soc-reports/cloud-security-posture-scoutsuite.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/cloud-security-posture-scoutsuite.md",
     "title": "Assessment: Cloud Security Posture Review (ScoutSuite)",
-    "date": "2026-02-11",
+    "date": "2026-02-08",
     "category": "Vulnerability Management"
   },
   {
-    "path": "soc-reports/network/wireshark-packet-analysis-review.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/network/wireshark-packet-analysis-review.md",
+    "path": "soc-reports/wireshark-packet-analysis-review.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/wireshark-packet-analysis-review.md",
     "title": "Investigation: Network Traffic Analysis Using Wireshark",
     "date": "2026-01-19",
     "category": "Network"
   },
   {
-    "path": "soc-reports/email-security/alert-triage-powershell-dns-exfiltration.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/email-security/alert-triage-powershell-dns-exfiltration.md",
+    "path": "soc-reports/alert-triage-powershell-dns-exfiltration.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/alert-triage-powershell-dns-exfiltration.md",
     "title": "Alert Triage: PowerShell-Driven Phishing Compromise with DNS Exfiltration",
     "date": "2026-01-12",
     "category": "Email Security"
   },
   {
-    "path": "soc-reports/vulnerability-management/vulnerability-management-assessment.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/vulnerability-management/vulnerability-management-assessment.md",
+    "path": "soc-reports/vulnerability-management-assessment.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/vulnerability-management-assessment.md",
     "title": "Assessment: Legacy System Identification and Vulnerability Management",
     "date": "2026-01-08",
     "category": "Vulnerability Management"
   },
   {
-    "path": "soc-reports/email-security/phishing-emails-analysis.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/email-security/phishing-emails-analysis.md",
+    "path": "soc-reports/phishing-emails-analysis.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/phishing-emails-analysis.md",
     "title": "Alert Triage: Phishing Email Analysis (Multiple Samples)",
     "date": "2026-01-06",
     "category": "Email Security"
   },
   {
-    "path": "soc-reports/email-security/phishing-analysis-fundamentals.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/email-security/phishing-analysis-fundamentals.md",
+    "path": "soc-reports/phishing-analysis-fundamentals.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/phishing-analysis-fundamentals.md",
     "title": "Alert Triage: Phishing Email Analysis",
     "date": "2026-01-03",
     "category": "Email Security"
   },
   {
-    "path": "soc-reports/credential-access/weak-credential-detection.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/credential-access/weak-credential-detection.md",
+    "path": "soc-reports/weak-credential-detection.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/weak-credential-detection.md",
     "title": "Alert Triage: Weak Credential Detection and Password Hash Cracking",
     "date": "2025-12-25",
     "category": "Credential Access"
   },
   {
-    "path": "soc-reports/endpoint/persistence-mechanism-detected.md",
-    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/endpoint/persistence-mechanism-detected.md",
+    "path": "soc-reports/persistence-mechanism-detected.md",
+    "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/persistence-mechanism-detected.md",
     "title": "Alert Triage: Persistence Mechanism Detection on Windows Endpoint",
     "date": "2025-12-15",
     "category": "Endpoint"
