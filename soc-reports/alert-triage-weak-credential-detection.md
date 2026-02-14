@@ -82,43 +82,34 @@ Searching authentication logs showed the `admin` account had been accessed from 
 - **Tactic:** Initial Access
 - **Technique:** Valid Accounts (T1078)
 
-## Decision / Remediation
+## Decision
 
-**Classification:** True Positive  
-**Severity:** High  
-**Actions Taken:**
-
-1. **Immediate:**
-   - Force password reset for all accounts with crackable hashes
-   - Disabled `admin` account pending ownership verification
-   - Blocked suspicious IP 45.33.32.156 at firewall
-
-2. **Short-term:**
-   - Migrated database to use bcrypt hashing with per-user salts
-   - Implemented minimum password complexity requirements:
-     - At least 12 characters
-     - Must include uppercase, lowercase, number, and special character
-   - Enabled account lockout after 5 failed login attempts
-
-3. **Long-term:**
-   - Recommend implementing multi-factor authentication (MFA)
-   - Deploy password breach monitoring service
-   - Schedule quarterly password audits
+- **Classification:** True Positive  
+- **Severity:** High  
+- **Justification:** Confirmed weak credentials with all five passwords cracked in under 1 second using standard wordlist. Unsalted MD5 hashing presents critical security risk.
 
 ## Response / Escalation
 
-- Notified application owner of weak credential policy and unsalted MD5 usage
-- Escalated to development team for urgent password hashing upgrade
-- Provided IOCs (suspicious IP) to threat intel team for correlation with other incidents
-- Documented recommendations for IT policy team
+**Immediate Actions:**
+- Documented all cracked credentials and IOCs
+- Recommended blocking suspicious IP 45.33.32.156 (accessed admin account day before investigation)
+- Escalated to Tier 2 and application security team for urgent remediation
+
+**Escalation Requests:**
+- Force password reset for all five compromised accounts
+- Disable admin account pending ownership verification
+- Upgrade password hashing from unsalted MD5 to bcrypt/Argon2
+- Implement password complexity policy and account lockout
+- Consider multi-factor authentication implementation  
+- Review authentication logs for unauthorized access from suspicious IP
 
 ## Lessons Learned
 
-1. MD5 and other fast hashing algorithms should never be used for passwords
-2. Password policies must enforce minimum complexity and length requirements
-3. Regular password audits can identify weak credentials before attackers exploit them
-4. Multi-factor authentication would have prevented unauthorized access even with compromised credentials
-5. Monitoring for authentication from unexpected IPs can help detect credential abuse
+1. Weak passwords can be cracked almost instantly with common tools and wordlists
+2. Unsalted MD5 hashing makes all passwords vulnerable to offline attacks
+3. Having good logging helped identify suspicious access from external IP after the fact
+4. Regular password audits could catch weak credentials before attackers exploit them
+5. This type of vulnerability requires escalation to development/security teams - beyond SOC scope
 
 ## Artifacts
 

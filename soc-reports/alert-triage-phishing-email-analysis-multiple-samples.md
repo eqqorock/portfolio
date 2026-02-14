@@ -64,10 +64,18 @@ These behaviors align with real-world phishing campaigns and present a credible 
 - **Justification:** Multiple high-confidence phishing indicators were present across samples, including spoofing, credential harvesting, and malicious attachment behavior.
 
 ## Response / Escalation
-- Block sender domains, URLs, and attachment hashes
-- Update email security filters and detection rules
-- Educate users on phishing indicators and reporting procedures
-- Monitor for related credential abuse or malware activity
+
+**Immediate Actions:**
+- Documented all phishing indicators and IOCs from 7 samples
+- Created comprehensive list of sender domains, URLs, and attachment hashes
+- Escalated to email security team with all indicators
+
+**Escalation Requests:**
+- Block identified sender domains and malicious URLs at email gateway
+- Add attachment hashes to email security filters
+- Update detection rules to catch similar phishing patterns
+- Recommend phishing awareness training highlighting these techniques
+- Monitor authentication logs for credential abuse attempts
 
 ## Lessons Learned
 - Phishing campaigns often reuse the same techniques across different brands

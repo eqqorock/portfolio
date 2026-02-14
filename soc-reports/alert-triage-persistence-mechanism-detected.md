@@ -79,22 +79,25 @@ The task was created with SYSTEM privileges, meaning the reverse shell would run
 - **Tactic:** Command and Control
 - **Technique:** Application Layer Protocol (T1071)
 
-## Decision / Remediation
+## Decision
 
-**Classification:** True Positive  
-**Severity:** High  
-**Action Taken:**
-1. Deleted malicious scheduled task using `schtasks /delete /tn WindowsUpdate /f`
-2. Removed PowerShell script file `C:\Users\Public\Documents\update.ps1`
-3. Blocked outbound connection to 10.10.99.100:4444 at firewall
-4. Isolated endpoint from network pending full forensic review
-5. Rotated credentials for all users on the affected system
+- **Classification:** True Positive  
+- **Severity:** High  
+- **Justification:** Confirmed persistence mechanism with SYSTEM-level privileges executing malicious PowerShell reverse shell on startup
 
 ## Response / Escalation
 
-- Escalated to Tier 2 for full forensic analysis to determine initial access vector and identify additional compromised systems
-- Documented all findings and provided IOCs to threat intel team
-- Notified system owner of compromise and remediation actions
+**Immediate Actions:**
+- Documented all findings including scheduled task details, PowerShell script content, and C2 IP
+- Recommended endpoint isolation to prevent further C2 communication
+- Escalated to Tier 2 SOC for remediation and forensic analysis
+
+**Escalation Requests:**
+- Remove malicious scheduled task and PowerShell script
+- Block outbound connection to 10.10.99.100:4444 at firewall
+- Investigate initial access vector (prior phishing alert on same host)
+- Check other endpoints for similar persistence mechanisms
+- Credential rotation for affected users
 
 ## Lessons Learned
 

@@ -66,7 +66,18 @@ The use of encoded command-line arguments, suspicious external domains, and know
 
 ## Response / Escalation
 
-The incident was handled internally. Response actions included host isolation, blocking malicious domains, resetting credentials for the affected user, and removing all identified malicious artifacts. No further escalation was required once containment was completed.
+**Immediate Actions:**
+- Documented complete attack timeline and all identified artifacts
+- Recommended immediate host isolation to prevent further exfiltration
+- Escalated to Tier 2 SOC for incident response and remediation
+
+**Escalation Requests:**
+- Isolate WORKSTATION-089 from network
+- Block domains haz4rdw4re.io and associated IPs at DNS/firewall level
+- Reset credentials for michael.ascot@tryhatme.com
+- Remove powercat.ps1 and any staged data directories
+- Investigate phishing email delivery chain
+- Check other endpoints for similar PowerShell/DNS exfiltration activity
 
 ## Lessons Learned
 

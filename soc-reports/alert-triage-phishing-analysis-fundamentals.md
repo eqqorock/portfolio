@@ -79,10 +79,16 @@ Although the Base64-encoded PDF attachment was benign in this case, this deliver
 
 ## Response / Escalation
 
-- Block sender domain and associated URLs at email gateway and web proxy
-- Add identified sender indicators, domains, and URLs to deny lists and security filters
-- Notify reporting user that email is confirmed phishing and advise no further interaction
-- Send phishing awareness reminder to impacted user group
+**Immediate Actions:**
+- Confirmed email as phishing and documented all IOCs
+- Notified reporting user to delete email and avoid clicking any links
+- Created ticket for email security team with sender IP, domains, and attachment hash
+
+**Escalation Requests:**
+- Block sender domain and malicious URLs at email gateway
+- Add indicators to email security filter deny lists
+- Check if other users received similar emails from this sender
+- Send phishing awareness reminder to affected department
 
 **Indicators of Compromise:**
 - Sender IP: [Redacted for lab]
