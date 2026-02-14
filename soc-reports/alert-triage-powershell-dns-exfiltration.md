@@ -1,15 +1,22 @@
----
-title: "Alert Triage: PowerShell-Driven Phishing Compromise with DNS Exfiltration"
-date: 2026-01-12
----
-
 # Alert Triage: PowerShell-Driven Phishing Compromise with DNS Exfiltration
 
 **Date:** 2026-01-12
 
-## Scenario
+## Investigation Summary
 
-A phishing email containing a malicious ZIP attachment was delivered to a corporate user. After the attachment was downloaded and executed, the host exhibited suspicious process behavior involving PowerShell spawning multiple system utilities. Further investigation revealed reconnaissance activity, data staging, DNS-based exfiltration, and the establishment of a reverse shell, indicating a full post-compromise attack chain.
+Investigation of a phishing-driven endpoint compromise involving PowerShell abuse for reconnaissance, data staging, and DNS-based exfiltration. Analysis revealed a complete attack chain from initial phishing email delivery through post-compromise activity including data exfiltration and reverse shell establishment.
+
+## Detection / Alert
+
+- **Alert name:** Suspicious PowerShell spawning nslookup with encoded data
+- **Time observed:** 2026-01-12 10:47 UTC
+- **Affected host:** WORKSTATION-089
+- **User context:** michael.ascot@tryhatme.com
+- **Source:** Sysmon Event ID 1 (Process Creation)
+
+## Triage / Logs
+
+Upon receiving high-severity process alerts, endpoint telemetry was reviewed to trace the attack sequence. Initial phishing alert correlated with subsequent PowerShell execution and suspicious DNS queries. Sysmon logs showed parent-child process relationships between `powershell.exe` and system utilities with Base64-encoded command-line arguments.
 
 ## Data Sources
 

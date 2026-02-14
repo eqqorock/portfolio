@@ -1,8 +1,22 @@
 # Alert Triage: Phishing Email Analysis (Multiple Samples)
+
 **Date:** 2026-01-06
 
-## Scenario
-This report is based on a controlled lab exercise analyzing multiple real-world phishing email samples. The objective was to identify common and advanced phishing techniques across different lures, brands, and delivery methods, and to assess user risk if interaction occurred.
+## Investigation Summary
+
+Analysis of multiple real-world phishing email samples from a controlled lab exercise. Investigation identified common and advanced phishing techniques across different brand impersonations, delivery methods, and social engineering tactics to assess user risk and document detection patterns.
+
+## Detection / Alert
+
+- **Alert source:** Security awareness training lab / Email security review
+- **Time observed:** 2026-01-06
+- **Sample count:** 7 phishing emails
+- **Impersonated brands:** PayPal, Home Depot, Netflix, Apple, Citrix, DHL, OneDrive
+- **Source:** Controlled lab environment (real-world phishing samples)
+
+## Triage / Logs
+
+Multiple phishing samples were analyzed systematically to identify patterns and techniques. Each sample underwent header analysis, URL inspection, attachment analysis, and social engineering assessment. Common indicators were documented to improve detection signatures.
 
 ## Data Sources
 - Raw email headers
@@ -58,6 +72,3 @@ These behaviors align with real-world phishing campaigns and present a credible 
 ## Lessons Learned
 - Phishing campaigns often reuse the same techniques across different brands
 - Attachment-based phishing remains effective despite user awareness training
-
----
-*Source: Hands-on security lab (phishing email analysis simulation)*

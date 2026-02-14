@@ -33,14 +33,17 @@ function parseFile(fpath){
   const name = path.basename(rel);
   if(name.toLowerCase() === 'readme.md') return null;
   
-  const text = fs.readFileSync(fpath, 'utf8');
+  let text = fs.readFileSync(fpath, 'utf8');
+  // Strip BOM if present
+  if(text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  
   const lines = text.split(/\r?\n/);
   let inCode = false;
   let title = name.replace(/\.md$/i,'');
   let date = null;
   
   for(let i=0;i<lines.length;i++){
-    const line = lines[i];
+    let line = lines[i];
     if(line.trim().startsWith('```')){ inCode = !inCode; continue; }
     if(inCode) continue;
     
