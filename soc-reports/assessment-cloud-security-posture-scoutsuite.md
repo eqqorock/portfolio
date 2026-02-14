@@ -1,4 +1,4 @@
-# Assessment: Cloud Security Posture Review (ScoutSuite)
+# Assessment | Vulnerability Management: Cloud Security Posture Review (ScoutSuite)
 
 **Assessment Type:** Proactive Vulnerability & Misconfiguration Assessment  
 **Cloud Provider:** Amazon Web Services (AWS)  

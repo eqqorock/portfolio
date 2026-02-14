@@ -1,4 +1,4 @@
-# Investigation: Network Traffic Analysis Using Wireshark
+# Investigation | Network: Network Traffic Analysis Using Wireshark
 
 **Date:** 2026-01-19
 

@@ -1,4 +1,4 @@
-# Alert Triage: PowerShell-Driven Phishing Compromise with DNS Exfiltration
+# Alert Triage | Email Security: PowerShell-Driven Phishing Compromise with DNS Exfiltration
 
 **Date:** 2026-01-12
 

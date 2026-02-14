@@ -14,9 +14,10 @@ function inferCategoryFromContent(filename, title){
   const combined = (filename + ' ' + title).toLowerCase();
   if(/phishing|email/i.test(combined)) return 'Email Security';
   if(/persistence|endpoint/i.test(combined)) return 'Endpoint';
-  if(/credential|password|hash|weak.*credential/i.test(combined)) return 'Credential Access';
+  if(/brute.*force|credential|password|hash|weak.*credential/i.test(combined)) return 'Credential Access';
   if(/wireshark|packet|network|traffic/i.test(combined)) return 'Network';
   if(/vulnerability|assessment|cloud|scoutsuite|legacy.*system/i.test(combined)) return 'Vulnerability Management';
+  if(/web.*security|web.*app|http|sql.*injection|xss/i.test(combined)) return 'Web Security';
   return 'Other';
 }
 

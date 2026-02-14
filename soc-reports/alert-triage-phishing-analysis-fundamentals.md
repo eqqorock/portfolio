@@ -1,4 +1,4 @@
-﻿# Alert Triage: Phishing Email Analysis (User-Reported)
+﻿# Alert Triage | Email Security: Phishing Email Analysis (User-Reported)
 
 **Date:** 2026-01-03
 

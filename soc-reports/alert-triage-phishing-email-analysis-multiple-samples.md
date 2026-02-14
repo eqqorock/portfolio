@@ -1,4 +1,4 @@
-# Alert Triage: Phishing Email Analysis (Multiple Samples)
+# Alert Triage | Email Security: Phishing Email Analysis (Multiple Samples)
 
 **Date:** 2026-01-06
 

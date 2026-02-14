@@ -1,4 +1,4 @@
-# Alert Triage: Weak Credential Detection and Password Hash Cracking
+# Alert Triage | Credential Access: Weak Credential Detection and Password Hash Cracking
 
 **Date:** 2025-12-25
 

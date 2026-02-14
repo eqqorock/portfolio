@@ -1,4 +1,4 @@
-# Alert Triage: Persistence Mechanism Detection on Windows Endpoint
+# Alert Triage | Endpoint: Persistence Mechanism Detection on Windows Endpoint
 
 **Date:** 2025-12-15
 
