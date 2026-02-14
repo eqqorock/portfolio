@@ -2,7 +2,7 @@
   {
     "path": "soc-reports/alert-triage-brute-force-attack-detection.md",
     "url": "https://github.com/eqqorock/portfolio/blob/main/soc-reports/alert-triage-brute-force-attack-detection.md",
-    "title": "Alert Triage | Credential Access: Brute Force Attack with Credential Compromise and Privilege Escalation",
+    "title": "Alert Triage | Credential Access: Brute Force Attack Detection and Initial Analysis",
     "date": "2026-02-14",
     "category": "Credential Access"
   },

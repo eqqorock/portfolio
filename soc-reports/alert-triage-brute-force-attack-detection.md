@@ -1,10 +1,10 @@
-# Alert Triage | Credential Access: Brute Force Attack with Credential Compromise and Privilege Escalation
+# Alert Triage | Credential Access: Brute Force Attack Detection and Initial Analysis
 
 **Date:** 2026-02-14
 
 ## Investigation Summary
 
-Investigation of a successful brute force attack against a web application admin panel and subsequent SSH compromise. Analysis revealed an attacker used dictionary-based credential attacks to gain initial access, exfiltrated SSH private keys, cracked the passphrase offline, and escalated privileges to root using misconfigured sudo permissions.
+Investigated a Splunk alert for multiple failed web application login attempts from a single external IP. Confirmed successful brute force attack against admin panel with subsequent suspicious SSH activity. Due to the complexity of the attack and system-level access observed, escalated to senior SOC analyst for full incident response.
 
 ## Detection / Alert
 
@@ -12,181 +12,121 @@ Investigation of a successful brute force attack against a web application admin
 - **Time observed:** 2026-02-14 13:45 UTC
 - **Affected host:** WEB-SERVER-01 (10.80.180.17)
 - **Attacker IP:** [External IP - Redacted for lab]
-- **Source:** Splunk correlation rule + Apache access logs
+- **Source:** Splunk correlation rule
 
 ## Triage / Logs
 
-Initial alert triggered on 50+ failed login attempts to `/admin/index.php` within a 2-minute window from a single external IP address. Upon review of authentication logs and web server access patterns, identified successful admin panel login followed by SSH authentication attempts using an RSA private key.
+Reviewed Splunk alert showing 50+ failed POST requests to `/admin/index.php` within a 2-minute window from single external IP. Checked if this was followed by successful login - confirmed admin account authentication succeeded at 13:47 UTC. Also noticed SSH login from same source IP shortly after web compromise.
 
 ## Data Sources
 
-- Apache access logs (`/var/log/apache2/access.log`)
-- Apache error logs (`/var/log/apache2/error.log`)
-- Linux authentication logs (`/var/log/auth.log`)
-- Splunk SIEM (log aggregation and correlation)
-- Web application login audit trail
-- SSH daemon logs
+- Splunk SIEM (web server logs and SSH authentication logs)
+- Apache access logs (via Splunk forwarder)
+- Linux authentication logs (via Splunk forwarder)
 
 ## Investigation Steps
 
-1. **Alert review:** Reviewed Splunk alert showing spike in HTTP POST requests to admin login page
-2. **Web log analysis:** Analyzed Apache access logs to identify failed vs. successful login attempts
-3. **Credential enumeration:** Identified username "admin" was discovered by attacker (found in HTML source comments)
-4. **Brute force confirmation:** Observed sequential password attempts matching common wordlist patterns (rockyou.txt indicators)
-5. **Post-compromise activity:** Traced successful admin login and subsequent access to sensitive files (RSA private key exposure)
-6. **SSH attack correlation:** Cross-referenced SSH authentication logs showing RSA key-based login attempts for user "john"
-7. **Privilege escalation detection:** Identified sudo command execution of `cat` binary to read `/etc/shadow` and `/root/root.txt`
-8. **Timeline reconstruction:** Built complete attack timeline from initial reconnaissance through root compromise
+1. **Alert review:** Opened Splunk alert showing spike in HTTP POST requests to `/admin/index.php`
+2. **Failed login analysis:** Queried Splunk for all requests to admin page from attacker IP - found 57 failed attempts with different password values in POST data
+3. **Success check:** Searched for HTTP 200 responses from same IP to admin panel - found successful login at 13:47 UTC (2 minutes after start of attack)
+4. **Post-compromise activity:** Checked what the attacker accessed after successful login - saw requests to download files from admin panel
+5. **SSH correlation:** Noticed SSH authentication logs showing connection from same external IP about 10 minutes later using username "john"
+6. **Escalation decision:** Attack appeared successful with potential system-level access, escalated to senior analyst for deeper investigation
 
 ## Evidence
 
-**Phase 1: Web Application Brute Force**
-- **Failed login attempts:** 50+ POST requests to `/admin/index.php` with varying password values
-- **Attack source:** Single external IP address
-- **Successful credential:** Username `admin` with weak password (cracked via dictionary attack)
-- **Exposed username:** HTML source code comment revealed username: `<!-- Hey john, if you do not remember, the username is admin -->`
+**Brute Force Activity:**
+- **Failed attempts:** 57 POST requests to `/admin/index.php` from single IP between 13:45-13:47 UTC
+- **Pattern observed:** Sequential requests with 1-2 second intervals (automated tool behavior)
+- **Successful login:** HTTP 200 response at 13:47:23 UTC for username "admin"
+- **No account lockout:** System allowed all 57 attempts without blocking attacker
 
-**Phase 2: Post-Compromise Reconnaissance**
-- **Admin panel access:** Successful login timestamp showed immediate navigation to sensitive areas
-- **Data exfiltration:** Download of RSA private key file (`id_rsa`) from admin panel
-- **Information disclosure:** Web application exposed SSH credentials in downloadable format
+**Post-Compromise Indicators:**
+- Immediate navigation to admin panel file management pages
+- Download requests for multiple files including what appeared to be configuration or credential files
+- Session remained active for approximately 15 minutes
 
-**Phase 3: SSH Lateral Movement**
-- **Private key attack:** SSH connection attempts using exfiltrated RSA private key
-- **Username enumeration:** Attacker used "john" as SSH username (discovered from source code comment)
-- **Passphrase cracking:** Offline brute force of RSA key passphrase (evidence: successful SSH login after initial failures)
-- **Successful SSH login:** Authentication via cracked private key for user `john`
+**SSH Activity:**
+- SSH authentication log showed successful login for user "john" from same attacker IP at 13:58 UTC
+- Authentication method: public key (not password)
+- Session duration: ~20 minutes before disconnect
 
-**Phase 4: Privilege Escalation**
-- **Sudo enumeration:** Execution of `sudo -l` to identify privilege escalation paths
-- **Binary abuse:** Sudo permissions allowed `john` to run `/usr/bin/cat` as root without password
-- **Shadow file access:** Command `sudo cat /etc/shadow` executed to dump password hashes
-- **Root flag access:** Command `sudo cat /root/root.txt` executed to confirm root-level access
-- **Hash exfiltration:** Root user SHA512crypt hash extracted from `/etc/shadow`
-
-**Attack Tools Identified:**
-- `nmap` - Port scanning and service enumeration (ports 22/SSH and 80/HTTP identified)
-- `gobuster` or `dirb` - Directory enumeration (discovered `/admin` directory)
-- `hydra` - HTTP form brute force tool (http-post-form attack syntax)
-- `ssh2john` - RSA private key hash extraction
-- `john the ripper` - Password/passphrase cracking with rockyou.txt wordlist
+**Splunk Query Examples:**
+```
+index=web_logs sourcetype=apache_access uri="/admin/index.php" src_ip="[ATTACKER_IP]" | stats count by status
+index=linux_auth sourcetype=sshd src_ip="[ATTACKER_IP]" | table _time, user, auth_method, status
+```
 
 ## Analysis
 
-This attack demonstrates a complete kill chain from initial reconnaissance through root compromise. The attacker leveraged multiple security weaknesses in a coordinated attack:
+This appears to be a successful brute force attack against a web application with follow-on SSH compromise. The attacker used an automated tool to try multiple passwords against the admin account until finding the correct one. 
 
-**Initial Access Vector:**
-The web application exposed usernames in HTML comments, eliminating the need to enumerate valid accounts. Combined with no rate limiting on login attempts, this allowed successful dictionary-based brute force using common passwords from `rockyou.txt`.
-
-**Credential Exposure:**
-After gaining admin panel access, the attacker discovered an exposed RSA private key and additional username information. Storing SSH keys in web-accessible locations represents a critical security misconfiguration.
-
-**Lateral Movement:**
-Rather than cracking the RSA passphrase online (which would generate additional failed SSH attempts), the attacker used offline cracking techniques with `ssh2john` and `john the ripper`. This minimized detection surface during the credential access phase.
-
-**Privilege Escalation:**
-The `sudo -l` output revealed that user `john` could execute `/usr/bin/cat` as root without a password. The attacker leveraged this to read privileged files including `/etc/shadow` (containing all user password hashes) and root-owned files. This represents overly permissive sudo configuration and follows known GTFOBins techniques for privilege escalation.
+**Observations:**
+- No rate limiting or account lockout was configured, allowing the attacker unlimited attempts
+- The time between failed attempts (1-2 seconds) suggests automated tooling like Hydra or similar
+- Successful admin login immediately led to file downloads, indicating the attacker knew what they were looking for
+- SSH login using public key authentication suggests credentials or keys were obtained from the web application
+- The gap between web compromise (13:47) and SSH login (13:58) may indicate offline preparation or credential processing
 
 **Risk Assessment:**
-- **High:** Complete system compromise with root-level access
-- **High:** Exposure of all user password hashes from `/etc/shadow`
-- **Medium:** SSH private key exposed via web application
-- **Medium:** No brute force protection mechanisms (rate limiting, account lockout)
+From the logs available in Splunk, I can confirm the attacker gained admin-level web access and SSH access to the server. I don't have visibility into what commands were run during the SSH session or what level of system access was achieved. This requires deeper investigation by senior analysts with access to command history and system logs.
+
+**Concerns flagged for escalation:**
+- How did attacker know to use "john" username for SSH?
+- What files were downloaded from admin panel?
+- What actions were performed during SSH session?
+- Is there persistent access remaining on the system?
 
 ## MITRE ATT&CK
 
-**Initial Access:**
-- **T1078** - Valid Accounts (compromised admin credentials)
-
-**Credential Access:**
-- **T1110.001** - Brute Force: Password Guessing (web admin panel)
-- **T1110.002** - Brute Force: Password Cracking (RSA passphrase, root hash)
-- **T1552.004** - Unsecured Credentials: Private Keys (exposed id_rsa)
-- **T1003.008** - OS Credential Dumping: /etc/passwd and /etc/shadow
-
-**Lateral Movement:**
-- **T1021.004** - Remote Services: SSH (using compromised private key)
-
-**Privilege Escalation:**
-- **T1548.003** - Abuse Elevation Control Mechanism: Sudo and Sudo Caching
-- **T1068** - Exploitation for Privilege Escalation (GTFOBins sudo cat abuse)
-
-**Discovery:**
-- **T1046** - Network Service Discovery (nmap scanning)
-- **T1083** - File and Directory Discovery (gobuster/dirb enumeration)
+- **T1110.001** - Brute Force: Password Guessing (web application login)
+- **T1078** - Valid Accounts (after successful brute force)
+- **T1021.004** - Remote Services: SSH (lateral movement to system)
 
 ## Decision
 
 - **Classification:** True Positive
-- **Severity:** Critical
-- **Justification:** Confirmed multi-stage attack resulting in full system compromise with root access, credential theft, and persistent backdoor capability via SSH keys
+- **Severity:** High
+- **Justification:** Confirmed successful brute force attack with subsequent SSH system access. Full extent of compromise unknown and requires escalation.
 
 ## Response / Escalation
 
-**Immediate Actions Taken:**
-1. **Containment:** Blocked attacker source IP at firewall and web application firewall (WAF)
-2. **Credential reset:** Forced password reset for `admin` and `john` user accounts
-3. **Key rotation:** Regenerated all SSH keys for affected accounts and revoked compromised `id_rsa`
-4. **Sudo review:** Removed overly permissive sudo rule allowing passwordless `cat` execution
-5. **System isolation:** Temporarily isolated WEB-SERVER-01 for forensic analysis
+**Immediate Actions (L1):**
+1. **Documented findings:** Created this incident report with timeline and Splunk queries
+2. **Blocked attacker IP:** Submitted firewall block request to network team
+3. **Notified stakeholders:** Alerted system owner about confirmed compromise
+4. **Escalated to L2:** Handed off to senior SOC analyst for full incident response
 
-**Remediation Actions:**
-1. **Rate limiting:** Implemented fail2ban rules to block IPs after 5 failed login attempts within 10 minutes
-2. **Account lockout:** Configured web application to lock accounts after 5 consecutive failed logins
-3. **Code review:** Removed sensitive information (usernames, hints) from HTML comments
-4. **File permissions:** Removed SSH private keys from web-accessible directories
-5. **Sudo hardening:** Reviewed and restricted sudo permissions across all accounts (principle of least privilege)
-6. **Password policy:** Enforced strong password requirements (minimum 12 characters, complexity rules)
-7. **MFA implementation:** Recommended multi-factor authentication for admin panel and SSH access
+**Escalation Notes:**
+- Provided Splunk workspace with saved searches for L2 investigation
+- Recommended system owner disable "admin" and "john" accounts pending investigation
+- Suggested isolating WEB-SERVER-01 from network if feasible
+- Senior analyst will need to investigate: command history, file integrity, persistence mechanisms, extent of data access
 
-**Monitoring Enhancements:**
-- Created Splunk correlation rule to detect multiple failed logins followed by successful authentication
-- Implemented alerting for sudo command execution of file-reading binaries (`cat`, `less`, `more`, `tail`)
-- Added detection for SSH private key exfiltration patterns in web access logs
-- Configured anomaly detection for unusual SSH login times or source IPs
+**Additional Detection:**
+- Recommended creating Splunk alert for successful login after multiple failed attempts
+- Suggested implementing rate limiting on web application login pages
 
 ## Lessons Learned
 
-1. **Defense in depth failed:** Multiple security layers were absent or misconfigured (no rate limiting, weak passwords, exposed credentials, excessive sudo permissions)
-2. **Information disclosure:** HTML comments leaked usernames, reducing attacker effort for credential enumeration
-3. **Credential storage:** SSH private keys should never be stored in or accessible via web applications
-4. **Sudo misconfiguration:** Allowing passwordless execution of file-reading utilities effectively grants root access
-5. **Offline attacks:** RSA passphrase cracking performed offline meant no additional failed login alerts were generated
-6. **Detection gap:** Initial nmap scan and directory enumeration were not logged or alerted on
-
-**Recommendations:**
-- Implement web application firewall (WAF) with brute force protection
-- Deploy intrusion detection system (IDS) to detect reconnaissance activities (port scans, directory enumeration)
-- Regular security assessments and penetration testing to identify misconfigurations
-- Security awareness training on secure credential storage and sudo configuration
+1. **Splunk visibility was good:** Having web and SSH logs in Splunk made it easy to correlate the attack across different systems
+2. **Detection worked:** Our failed login correlation rule caught the brute force attempt in real-time
+3. **No prevention in place:** The web application had no rate limiting or account lockout to stop brute force attacks
+4. **Escalation was necessary:** As L1, I could identify the compromise but needed senior analyst for deeper forensics and remediation
+5. **Alert tuning needed:** Should configure alerts for successful login following multiple failures, not just the failures themselves
 
 ## Artifacts
 
-**Indicators of Compromise (IOCs):**
+**Indicators of Compromise:**
 - Attacker IP: [Redacted for lab environment]
-- Compromised accounts: `admin`, `john`
-- Compromised file: `/home/john/.ssh/id_rsa`
-- Attack vectors: `/admin/index.php` (HTTP POST brute force)
-- Sudo abuse: `/usr/bin/cat /etc/shadow`, `/usr/bin/cat /root/root.txt`
+- Compromised accounts: `admin` (web), `john` (SSH)
+- Attack target: `/admin/index.php` on WEB-SERVER-01 (10.80.180.17)
+- Timeframe: 2026-02-14 13:45 - 14:18 UTC
 
-**Attack Timeline:**
-1. Network reconnaissance (nmap scan of ports 22, 80)
-2. Directory enumeration (discovered `/admin` endpoint)
-3. Username discovery (HTML source code comment)
-4. Password brute force (hydra with rockyou.txt)
-5. Admin panel compromise
-6. RSA private key exfiltration
-7. Offline passphrase cracking (ssh2john + john)
-8. SSH lateral movement
-9. Privilege escalation (sudo cat abuse)
-10. Root compromise and credential dumping
-
-## References
-
-- TryHackMe Lab: BruteIt Room (Brute Force Training Exercise)
-- GTFOBins: https://gtfobins.github.io/gtfobins/cat/
-- MITRE ATT&CK: Brute Force (T1110)
-- Splunk Documentation: Failed Authentication Detection
+**Splunk Saved Searches:**
+- "BruteIt_Failed_Logins" - All failed admin attempts from attacker IP
+- "BruteIt_Success_and_Post_Compromise" - Successful login and subsequent activity
+- "BruteIt_SSH_Correlation" - SSH activity from same source IP
 
 ---
-*Source: Hands-on security lab (brute force attack detection and response)*
+*Source: TryHackMe BruteIt lab (brute force attack detection training)*
